@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lộ trình học System Design</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#F3F4F1;
+    --card:#FFFFFF;
+    --ink:#15211E;
+    --ink-soft:#4B564F;
+    --ink-faint:#7C857E;
+    --line:#DCE0D8;
+    --line-soft:#E8EBE4;
+    --accent:#0F6E56;
+    --amber:#A85F0C;
+    --s1:#5E6D66;
+    --s2:#0F6E56;
+    --s3:#534AB7;
+    --s4:#BC5227;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'Inter',system-ui,sans-serif;
+    line-height:1.65;
+    -webkit-font-smoothing:antialiased;
+    padding:0 24px 100px;
+  }
+  .wrap{max-width:820px;margin:0 auto}
+
+  /* ---- Hero ---- */
+  header{padding:88px 0 56px;border-bottom:1px solid var(--line)}
+  .eyebrow{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:12.5px;letter-spacing:0.14em;text-transform:uppercase;
+    color:var(--accent);margin-bottom:22px;display:flex;align-items:center;gap:10px;
+  }
+  .eyebrow::before{content:"";width:26px;height:1px;background:var(--accent)}
+  h1{
+    font-family:'Space Grotesk',sans-serif;
+    font-weight:600;font-size:clamp(38px,7vw,62px);
+    line-height:1.02;letter-spacing:-0.02em;margin-bottom:24px;
+  }
+  h1 em{font-style:normal;color:var(--accent)}
+  .lead{font-size:18px;color:var(--ink-soft);max-width:60ch}
+  .meta{
+    display:flex;flex-wrap:wrap;gap:28px;margin-top:36px;
+    font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--ink-faint);
+  }
+  .meta b{color:var(--ink);font-weight:500}
+
+  /* ---- Pipeline ---- */
+  .pipeline{position:relative;padding-top:64px}
+  .pipeline::before{
+    content:"";position:absolute;left:19px;top:64px;bottom:40px;width:2px;
+    background:linear-gradient(var(--line),var(--line-soft));
+  }
+  @media(min-width:720px){
+    .pipeline::before{left:27px}
+  }
+
+  .phase{position:relative;padding-left:60px;padding-bottom:52px}
+  @media(min-width:720px){.phase{padding-left:80px}}
+
+  .node{
+    position:absolute;left:0;top:2px;width:40px;height:40px;border-radius:50%;
+    background:var(--card);border:2px solid var(--nc,var(--accent));
+    display:flex;align-items:center;justify-content:center;
+    font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:17px;
+    color:var(--nc,var(--accent));z-index:2;
+  }
+  .phase-label{
+    font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:0.08em;
+    text-transform:uppercase;color:var(--ink-faint);margin-bottom:6px;
+  }
+  .phase-head{
+    display:flex;flex-wrap:wrap;align-items:baseline;gap:14px;margin-bottom:18px;
+  }
+  .phase-head h2{
+    font-family:'Space Grotesk',sans-serif;font-weight:600;
+    font-size:clamp(23px,3.4vw,29px);letter-spacing:-0.01em;
+  }
+  .duration{
+    font-family:'IBM Plex Mono',monospace;font-size:12px;
+    padding:4px 11px;border-radius:100px;white-space:nowrap;
+    background:var(--dc-bg);color:var(--dc-fg);border:1px solid var(--dc-bd);
+  }
+
+  .card{
+    background:var(--card);border:1px solid var(--line);border-radius:14px;
+    padding:26px 28px;border-left:3px solid var(--nc,var(--accent));
+  }
+  .row{display:grid;grid-template-columns:1fr;gap:4px 0;margin-bottom:20px}
+  .row:last-child{margin-bottom:0}
+  @media(min-width:560px){.row{grid-template-columns:132px 1fr;gap:0 20px}}
+  .row .k{
+    font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:0.03em;
+    color:var(--ink-faint);padding-top:2px;
+  }
+  .row .v{color:var(--ink-soft);font-size:15.5px}
+  .row .v strong{color:var(--ink);font-weight:600}
+
+  ul{list-style:none;margin-top:6px}
+  ul li{position:relative;padding-left:20px;margin-bottom:7px;font-size:15px}
+  ul li::before{
+    content:"";position:absolute;left:0;top:10px;width:6px;height:6px;
+    border-radius:50%;background:var(--nc,var(--accent));
+  }
+
+  /* problem -> solution table */
+  .ps{margin-top:10px;border:1px solid var(--line-soft);border-radius:10px;overflow:hidden}
+  .ps-row{display:grid;grid-template-columns:1fr 1fr;border-bottom:1px solid var(--line-soft)}
+  .ps-row:last-child{border-bottom:none}
+  .ps-row.head{background:#F6F8F4}
+  .ps-cell{padding:11px 15px;font-size:14px}
+  .ps-cell.problem{color:var(--ink-soft);border-right:1px solid var(--line-soft)}
+  .ps-cell.sol{color:var(--ink);font-weight:500}
+  .ps-row.head .ps-cell{
+    font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:0.05em;
+    text-transform:uppercase;color:var(--ink-faint);font-weight:400;
+  }
+  .ps-row.head .ps-cell.sol{color:var(--accent)}
+
+  /* ---- closing ---- */
+  .closing{
+    margin-top:20px;background:var(--ink);color:#EAEDE7;border-radius:16px;
+    padding:38px 34px;position:relative;overflow:hidden;
+  }
+  .closing::after{
+    content:"↻";position:absolute;right:-6px;bottom:-30px;font-size:150px;
+    color:rgba(255,255,255,0.05);font-family:'Space Grotesk',sans-serif;
+  }
+  .closing .tag{
+    font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:0.1em;
+    text-transform:uppercase;color:#6FB79E;margin-bottom:12px;
+  }
+  .closing h3{
+    font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:24px;
+    margin-bottom:12px;letter-spacing:-0.01em;
+  }
+  .closing p{color:#B8C2BA;font-size:16px;max-width:58ch;position:relative;z-index:1}
+
+  @media(prefers-reduced-motion:no-preference){
+    .phase{opacity:0;transform:translateY(14px);animation:rise .6s ease forwards}
+    .phase:nth-child(1){animation-delay:.05s}
+    .phase:nth-child(2){animation-delay:.15s}
+    .phase:nth-child(3){animation-delay:.25s}
+    .phase:nth-child(4){animation-delay:.35s}
+    @keyframes rise{to{opacity:1;transform:none}}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="eyebrow">Dành cho người mới bắt đầu</div>
+    <h1>Lộ trình học<br><em>System Design</em></h1>
+    <p class="lead">Bốn giai đoạn nối tiếp nhau như một đường ống — đi từ những viên gạch nền tảng đến khả năng tự thiết kế một hệ thống hoàn chỉnh.</p>
+    <div class="meta">
+      <span><b>~3 tháng</b> nếu học đều</span>
+      <span><b>4</b> giai đoạn</span>
+      <span><b>Không cần</b> code chi tiết</span>
+    </div>
+  </header>
+
+  <main class="pipeline">
+
+    <!-- PHASE 1 -->
+    <section class="phase" style="--nc:var(--s1);--dc-bg:#EEEFEB;--dc-fg:#4B564F;--dc-bd:#DCE0D8">
+      <div class="node">1</div>
+      <div class="phase-label">Giai đoạn 01 · Móng nhà</div>
+      <div class="phase-head">
+        <h2>Nền tảng cơ bản</h2>
+        <span class="duration">2–3 tuần</span>
+      </div>
+      <div class="card">
+        <div class="row"><div class="k">Là gì</div><div class="v">Những viên gạch chung mà mọi hệ thống đều dùng. Chưa phải "thiết kế", mà là hiểu các thành phần rời rạc trước.</div></div>
+        <div class="row"><div class="k">Giải quyết</div><div class="v">Không có nền này, khi học đến load balancer hay cache bạn sẽ không biết nó gắn vào đâu — dẫn đến học vẹt.</div></div>
+        <div class="row"><div class="k">Cách làm</div><div class="v"><ul>
+          <li>Client–server: gõ URL vào trình duyệt thì điều gì xảy ra? (DNS → request → server → response)</li>
+          <li>HTTP methods (GET/POST/PUT/DELETE) và status code (200, 404, 500)</li>
+          <li>Phân biệt SQL (bảng, quan hệ) và NoSQL (document, key-value)</li>
+          <li>Tự viết một REST API nhỏ (ví dụ quản lý todo) để chạm tay vào</li>
+        </ul></div></div>
+      </div>
+    </section>
+
+    <!-- PHASE 2 -->
+    <section class="phase" style="--nc:var(--s2);--dc-bg:#E4F1EB;--dc-fg:#0F6E56;--dc-bd:#B9DECF">
+      <div class="node">2</div>
+      <div class="phase-label">Giai đoạn 02 · Linh hồn</div>
+      <div class="phase-head">
+        <h2>Khái niệm cốt lõi</h2>
+        <span class="duration">3–4 tuần</span>
+      </div>
+      <div class="card">
+        <div class="row"><div class="k">Là gì</div><div class="v">Các kỹ thuật giúp hệ thống chịu tải lớn mà không sập. Đây là phần quan trọng nhất.</div></div>
+        <div class="row"><div class="k">Giải quyết</div><div class="v">Một app chạy tốt với 100 user sẽ sập với 1 triệu user. Mỗi khái niệm ở đây trả lời câu hỏi "khi đông user thì làm sao?".</div></div>
+        <div class="row"><div class="k">Cách làm</div><div class="v">
+          Học theo cặp <strong>vấn đề → giải pháp</strong>:
+          <div class="ps">
+            <div class="ps-row head"><div class="ps-cell problem">Vấn đề gặp phải</div><div class="ps-cell sol">Giải pháp</div></div>
+            <div class="ps-row"><div class="ps-cell problem">1 server không chịu nổi traffic</div><div class="ps-cell sol">Load balancer chia tải</div></div>
+            <div class="ps-row"><div class="ps-cell problem">Database bị query dồn dập, chậm</div><div class="ps-cell sol">Cache (Redis)</div></div>
+            <div class="ps-row"><div class="ps-cell problem">Query tìm kiếm mất vài giây</div><div class="ps-cell sol">Đánh index</div></div>
+            <div class="ps-row"><div class="ps-cell problem">Dữ liệu quá lớn cho 1 máy</div><div class="ps-cell sol">Sharding</div></div>
+            <div class="ps-row"><div class="ps-cell problem">Sợ mất dữ liệu khi server chết</div><div class="ps-cell sol">Replication</div></div>
+            <div class="ps-row"><div class="ps-cell problem">Việc nặng làm user chờ lâu</div><div class="ps-cell sol">Message queue</div></div>
+          </div>
+        </div></div>
+      </div>
+    </section>
+
+    <!-- PHASE 3 -->
+    <section class="phase" style="--nc:var(--s3);--dc-bg:#EEEDFB;--dc-fg:#534AB7;--dc-bd:#CFCBF0">
+      <div class="node">3</div>
+      <div class="phase-label">Giai đoạn 03 · Học lỏm</div>
+      <div class="phase-head">
+        <h2>Học qua case study</h2>
+        <span class="duration">4–6 tuần</span>
+      </div>
+      <div class="card">
+        <div class="row"><div class="k">Là gì</div><div class="v">Xem người có kinh nghiệm ghép các khái niệm ở giai đoạn 2 thành một hệ thống hoàn chỉnh.</div></div>
+        <div class="row"><div class="k">Giải quyết</div><div class="v">Biết từng khái niệm rời rạc <strong>không bằng</strong> biết ghép chúng lại. Bước này dạy bạn "gu" ghép nối.</div></div>
+        <div class="row"><div class="k">Cách làm</div><div class="v">Đi từ dễ đến khó:<ul>
+          <li><strong>URL shortener</strong> (như bit.ly) — đơn giản nhất, tốt để bắt đầu</li>
+          <li><strong>Rate limiter</strong> — giới hạn số request mỗi user</li>
+          <li><strong>Chat app</strong> — realtime, độ khó vừa</li>
+          <li><strong>News feed</strong> (như Facebook) — phức tạp, tổng hợp nhiều thứ</li>
+        </ul>Với mỗi case, chú ý cách ước lượng quy mô (số user, request/giây, dung lượng) trước khi vẽ kiến trúc.</div></div>
+      </div>
+    </section>
+
+    <!-- PHASE 4 -->
+    <section class="phase" style="--nc:var(--s4);--dc-bg:#FBEAE2;--dc-fg:#BC5227;--dc-bd:#F0C9B7">
+      <div class="node">4</div>
+      <div class="phase-label">Giai đoạn 04 · Thực chiến</div>
+      <div class="phase-head">
+        <h2>Tự luyện tập</h2>
+        <span class="duration">song song</span>
+      </div>
+      <div class="card">
+        <div class="row"><div class="k">Là gì</div><div class="v">Tự thiết kế mà không nhìn đáp án trước, rồi so sánh sau. Bước biến kiến thức thành kỹ năng thật.</div></div>
+        <div class="row"><div class="k">Giải quyết</div><div class="v">Đọc hiểu <strong>không bằng</strong> tự làm được. Chỉ khi tự bí, tự sai rồi sửa thì mới nhớ sâu.</div></div>
+        <div class="row"><div class="k">Cách làm</div><div class="v">Quy trình 4 bước cho mỗi bài:<ul>
+          <li>Làm rõ yêu cầu — hệ thống cần làm gì? quy mô bao nhiêu?</li>
+          <li>Vẽ kiến trúc tổng quan — các thành phần chính</li>
+          <li>Đi sâu 1–2 phần khó — cách lưu dữ liệu, cách scale</li>
+          <li>Tự chỉ ra điểm yếu trong thiết kế của mình</li>
+        </ul></div></div>
+      </div>
+    </section>
+
+    <div class="closing">
+      <div class="tag">Lưu ý quan trọng nhất</div>
+      <h3>Giai đoạn 4 chạy song song, không chờ học xong hết</h3>
+      <p>Học được khái niệm nào là thử áp dụng ngay. Khi luyện tập mà thấy hổng chỗ nào, quay lại ôn giai đoạn 2 — đây là vòng lặp bình thường, không phải học một lần là xong.</p>
+    </div>
+
+  </main>
+</div>
+</body>
+</html>

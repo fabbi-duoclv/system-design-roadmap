@@ -1,0 +1,595 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ôn tập cấu trúc có hệ thống</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --paper:#F7F4EE; --card:#FFFFFF; --ink:#2E2A26; --ink2:#57514A; --muted:#948C81;
+    --rust:#B4541D; --rust-ink:#8F3F13; --pill:#F3E4D5; --line:#E8E2D8; --quote:#F4F2EE;
+    --p1:#5B8DEF; --p2:#3FBF8F; --p3:#A06CE4; --p4:#E0A22B; --p5:#E4566E; --p0:#B4541D;
+    --sans:"Be Vietnam Pro",-apple-system,"Segoe UI",Roboto,sans-serif;
+    --mono:"JetBrains Mono",ui-monospace,"SFMono-Regular",Menlo,monospace;
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);
+    font-size:15px;line-height:1.6;padding:0 20px 96px}
+  .wrap{max-width:900px;margin:0 auto}
+
+  header{padding:56px 0 26px}
+  .eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+  h1{font-size:clamp(30px,5vw,42px);line-height:1.12;font-weight:800;margin:10px 0 8px;letter-spacing:-.02em}
+  h1 em{font-style:normal;color:var(--rust)}
+  .sub{color:var(--ink2);max-width:58ch;margin:0}
+
+  /* trục 24 tuần */
+  .ruler{margin:34px 0 8px;padding:20px 20px 14px;background:var(--card);border:1px solid var(--line);border-radius:14px}
+  .ruler-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:14px}
+  .ruler-head span{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+  .track{position:relative;height:26px}
+  .bar{position:absolute;top:5px;height:16px;border-radius:8px;border:none;padding:0 0 0 10px;
+    font:500 11px/16px var(--mono);color:#fff;text-align:left;cursor:pointer;overflow:hidden;
+    white-space:nowrap;opacity:.9;transition:opacity .15s,transform .15s}
+  .bar:hover,.bar:focus-visible{opacity:1;transform:translateY(-1px)}
+  .scale{display:flex;border-top:1px solid var(--line);padding-top:6px;margin-top:4px}
+  .scale i{flex:1;font:400 10px/1 var(--mono);color:var(--muted);font-style:normal}
+  .scale i:last-child{text-align:right;flex:0 0 auto}
+
+  .stats{display:flex;flex-wrap:wrap;gap:10px;margin:22px 0 6px}
+  .stat{flex:1 1 150px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+  .stat b{display:block;font-size:24px;font-weight:800;letter-spacing:-.02em;line-height:1.25}
+  .stat span{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+  .meter{height:5px;background:var(--line);border-radius:3px;overflow:hidden;margin-top:10px}
+  .meter i{display:block;height:100%;background:var(--rust);width:0;transition:width .35s ease}
+
+  .phase{background:var(--card);border:1px solid var(--line);border-left:3px solid var(--dot,var(--rust));
+    border-radius:12px;padding:24px 26px;margin:16px 0;scroll-margin-top:16px}
+  .phase-top{display:flex;justify-content:space-between;gap:16px;align-items:baseline;flex-wrap:wrap}
+  .phase h2{font-size:20px;font-weight:700;margin:0;letter-spacing:-.01em;display:flex;align-items:center;gap:10px}
+  .dot{width:9px;height:9px;border-radius:50%;background:var(--dot);flex:0 0 auto}
+  .weeks{font-family:var(--mono);font-size:11px;color:var(--muted);white-space:nowrap}
+  .why{color:var(--ink2);margin:10px 0 0;max-width:62ch}
+  .phase-meter{display:flex;align-items:center;gap:10px;margin-top:16px}
+  .phase-meter .meter{flex:1;margin:0}
+  .phase-meter .meter i{background:var(--dot)}
+  .phase-meter em{font-family:var(--mono);font-size:11px;font-style:normal;color:var(--muted);min-width:52px;text-align:right}
+
+  .label{display:flex;justify-content:space-between;align-items:center;gap:12px;
+    font-family:var(--mono);font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);
+    margin:26px 0 6px;padding-bottom:8px;border-bottom:1px solid var(--line)}
+  .expand{font:inherit;letter-spacing:.08em;color:var(--rust-ink);background:none;border:none;
+    cursor:pointer;padding:2px 0;text-transform:uppercase}
+  .expand:hover{text-decoration:underline}
+
+  ul{list-style:none;margin:0;padding:0}
+
+  /* khối tuần (cấp 1) */
+  .block{border-bottom:1px solid #F1ECE4}
+  .block:last-child{border-bottom:none}
+  .head{display:flex;gap:11px;align-items:flex-start;padding:11px 8px 11px 0;cursor:pointer;
+    border-radius:8px;user-select:none}
+  .head:hover{background:#FBF9F5}
+  .chev{width:14px;flex:0 0 auto;margin-top:5px;color:#BDB4A6;transition:transform .18s}
+  .block.open .chev{transform:rotate(90deg)}
+  .head .txt{flex:1;min-width:0;font-weight:500}
+  .head .wk{font-family:var(--mono);font-size:11px;color:var(--muted);display:block;margin-bottom:1px;font-weight:400}
+  .count{font-family:var(--mono);font-size:11px;color:var(--muted);flex:0 0 auto;margin-top:3px}
+  .block.full .head .txt{color:var(--muted)}
+  .block.full .count{color:var(--dot)}
+
+  /* việc con (cấp 2) */
+  .subs{display:none;margin:0 0 10px 0;padding:2px 0 2px 21px;border-left:1.5px solid #EFE9E0}
+  .block.open .subs{display:block}
+
+  .item{display:flex;gap:11px;padding:7px 8px 7px 0;align-items:flex-start;border-radius:8px}
+  .item:hover{background:#FBF9F5}
+  .box{appearance:none;-webkit-appearance:none;margin:3px 0 0;flex:0 0 auto;
+    width:17px;height:17px;border:1.5px solid #CFC7BA;border-radius:5px;background:#fff;cursor:pointer;position:relative}
+  .box:checked{background:var(--dot,var(--rust));border-color:var(--dot,var(--rust))}
+  .box:checked::after{content:"";position:absolute;left:5px;top:1.5px;width:4px;height:9px;
+    border:solid #fff;border-width:0 2px 2px 0;transform:rotate(42deg)}
+  .box.partial{border-color:var(--dot,var(--rust))}
+  .box.partial::after{content:"";position:absolute;left:3px;top:6.5px;width:9px;height:2.5px;
+    border-radius:2px;background:var(--dot,var(--rust))}
+  .box:focus-visible{outline:2px solid var(--rust);outline-offset:2px}
+  .item .txt{flex:1;min-width:0;cursor:pointer;font-size:14.5px}
+  .item.done .txt{color:var(--muted);text-decoration:line-through;text-decoration-color:#D9D1C4}
+
+  .side{--dot:var(--p0);margin-top:44px}
+  .side-head{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:12px}
+  .side-head h2{font-size:26px;font-weight:800;color:var(--rust);margin:0;letter-spacing:-.02em}
+  .pill{font-family:var(--mono);font-size:11px;color:var(--rust-ink);background:var(--pill);border-radius:999px;padding:4px 11px}
+  .side-note{color:var(--ink2);font-size:14px}
+  .vol h3{font-size:19px;font-weight:700;margin:6px 0 10px}
+  .quote{background:var(--quote);border-radius:10px;padding:16px 18px;margin-top:20px}
+  .quote p{margin:6px 0 0;font-size:15px;font-weight:500}
+
+  footer{display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;
+    margin-top:40px;padding-top:18px;border-top:1px solid var(--line);
+    font-family:var(--mono);font-size:11px;color:var(--muted)}
+  button.reset{font:inherit;color:var(--rust-ink);background:none;border:1px solid var(--line);
+    border-radius:999px;padding:6px 14px;cursor:pointer}
+  button.reset:hover{background:var(--pill)}
+  .saved{opacity:0;transition:opacity .3s}
+  .saved.on{opacity:1}
+
+  @media (max-width:600px){
+    body{padding:0 14px 72px}
+    .phase{padding:20px 16px}
+    header{padding:36px 0 20px}
+    .ruler{padding:16px 14px 12px}
+    .bar{font-size:0;padding:0}
+    .subs{padding-left:15px}
+  }
+  @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<div class="wrap">
+
+<header>
+  <div class="eyebrow">24 tuần · ~10–15 giờ/tuần (cao điểm T5–7, T11–12) · buổi tối + cuối tuần</div>
+  <h1>Ôn tập cấu trúc <em>có hệ thống</em></h1>
+  <p class="sub">Mỗi khối tuần chia thành các việc làm gọn trong một buổi. Bấm vào khối để mở ra, tích từng việc con — ô lớn tự sáng khi đủ.</p>
+</header>
+
+<section class="ruler" aria-label="Trục 24 tuần">
+  <div class="ruler-head"><span>Các giai đoạn chồng lấn</span><span>Tuần 1 → 24</span></div>
+  <div id="track"></div>
+  <div class="scale"><i>T1</i><i>T5</i><i>T9</i><i>T13</i><i>T17</i><i>T21</i><i>T24</i></div>
+</section>
+
+<div class="stats">
+  <div class="stat"><b id="s-done">0</b><span>Việc đã xong</span></div>
+  <div class="stat"><b id="s-total">0</b><span>Tổng việc nhỏ</span></div>
+  <div class="stat"><b id="s-check">0/29</b><span>Checklist chính</span></div>
+  <div class="stat" style="flex:2 1 220px">
+    <b id="s-pct">0%</b><span>Tiến độ chung</span>
+    <div class="meter"><i id="s-bar"></i></div>
+  </div>
+</div>
+
+<main id="phases"></main>
+
+<section class="phase side" style="--dot:var(--p0)">
+  <div class="side-head">
+    <h2>Kiến thức chạy nền</h2>
+    <span class="pill">1h mỗi tuần</span>
+    <span class="side-note">chạy song song, không xếp vào tuần nào</span>
+  </div>
+  <div class="vol">
+    <div class="eyebrow">Vol 0 tra cứu · Vol 1 &amp; 2 system design</div>
+    <h3>Vol 1 &amp; Vol 2 dành cho system design</h3>
+    <p class="why">Vol 0 là tuyển tập newsletter, thứ tự ngẫu nhiên — đọc tuần tự thì rời rạc nhưng tra theo chủ đề thì rất tốt, phủ gần đúng phần vòng fullstack hay hỏi. Vol 1 và Vol 2 (Alex Xu) là nguồn system design chính: dùng ở giai đoạn 2 rồi tra lại dần mỗi tuần. Dành ~1h mỗi tuần cho mảng này, không xếp vào tuần cụ thể.</p>
+    <div class="label"><span>Sáu mảng chạy song song</span><button class="expand" data-toggle="side">Mở tất cả</button></div>
+    <ul id="side-list"></ul>
+    <div class="quote">
+      <div class="eyebrow">Lợi thế riêng của bạn</div>
+      <p>“Mỗi case tự viết schema thật kèm index và query pattern.”</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <span id="saved" class="saved">Đã lưu</span>
+  <span id="where" class="saved on" style="margin-right:auto"></span>
+  <button class="reset" id="export">Xuất tiến độ</button>
+  <button class="reset" id="import">Nhập tiến độ</button>
+  <button class="reset" id="reset">Xóa toàn bộ tiến độ</button>
+  <input type="file" id="file" accept="application/json,.json" hidden>
+</footer>
+</div>
+
+<script>
+const PHASES = [
+{ id:"p1", color:"var(--p1)", name:"Nền tảng & tự đánh giá", weeks:"Tuần 1–8", start:1, end:8,
+  why:"Nhiều người bỏ qua bước này — sai lầm lớn nhất. Biết chính xác điểm yếu trước khi học, và ghi lại điểm số để tuần 12 đo lại.",
+  timeline:[
+    ["Tuần 1–2","Mock test DSA, tự chấm để lập baseline",[
+      "Làm 10 bài Easy bấm giờ 20 phút/bài — đây là baseline duy nhất, không lặp lại ở checklist",
+      "Làm 5 bài Medium, không xem lời giải trong 40 phút đầu",
+      "Chấm theo 4 nhóm: array/string, hash map, two-pointer, đệ quy",
+      "Ghi điểm số và 5 lỗ hổng lớn nhất vào một file, để mở suốt 24 tuần và đo lại ở tuần 12"]],
+    ["Tuần 3–4","Ôn JS/TS nâng cao (bỏ mini-React, giữ nền tảng)",[
+      "Closure và scope: tự viết 5 ví dụ từ đầu, không copy",
+      "Prototype chain: implement lại new, call, bind (thị trường VN vẫn hỏi)",
+      "Async: viết lại Promise.all và một hàm retry có backoff",
+      "Event loop: dự đoán output 10 snippet macro/microtask trước khi chạy",
+      "TS: tự viết generic, conditional type và 3 utility type"]],
+    ["Tuần 5–6","React internals + chiến lược render frontend",[
+      "Reconciliation: tóm tắt cách React diff và vai trò thật của key",
+      "Rendering strategy: phân biệt CSR / SSR / SSG / streaming, chọn cái nào khi nào",
+      "Core Web Vitals: đo LCP/CLS/INP một trang thật rồi tối ưu, ghi lại số",
+      "Bundle size: phân tích bundle, code-split một route, đo trước/sau",
+      "Tùy chọn: tự implement mini useState để nắm chắc closure — cắt phần mini-React còn lại",
+      "Viết ra khi nào KHÔNG nên dùng memo/useMemo/useCallback"]],
+    ["Tuần 7–8","Ôn Node.js",[
+      "Streams: viết script xử lý file 1GB mà không tràn RAM",
+      "Tự implement lại class EventEmitter",
+      "Cluster/worker_threads: benchmark một API trước và sau",
+      "Cố tình tạo memory leak rồi tìm ra bằng heap snapshot"]]
+  ],
+  checklist:[
+    "File baseline: điểm DSA + 5 lỗ hổng lớn nhất (mở suốt 24 tuần)",
+    "Cheat sheet JS/TS advanced tự viết",
+    "Báo cáo tối ưu 1 component + 1 trang (kèm số ms và Core Web Vitals)",
+    "Môi trường luyện tập sẵn sàng (LeetCode, Excalidraw)",
+    "Sách You Don’t Know JS để chế độ tra khi cần, không đọc tuần tự"
+  ]},
+
+{ id:"p2", color:"var(--p2)", name:"Kỹ thuật chuyên sâu", weeks:"Tuần 5–12", start:5, end:12,
+  why:"Phần nhà tuyển dụng senior probe sâu nhất. Trả lời được cả “tại sao” lẫn “khi nào KHÔNG cần” mới là tín hiệu senior.",
+  timeline:[
+    ["Tuần 5–7","System design: Alex Xu Vol 1 & Vol 2 + case + caching",[
+      "Đọc Vol 1 phần framework, mỗi chương tóm tắt đúng 1 trang",
+      "Lập template 6 bước dùng cho mọi buổi system design",
+      "Case: rate limiter — vẽ Excalidraw, chốt thuật toán",
+      "Case: news feed — ước lượng QPS và dung lượng",
+      "Case: chat system — delivery guarantee và consistency",
+      "CQRS và event sourcing: chỉ tới mức HIỂU — nói được khi nào dùng, khi nào là over-engineering (không build prototype)"]],
+    ["Tuần 8–9","Database, caching & toàn vẹn dữ liệu",[
+      "Chạy EXPLAIN trên 5 query thật, đọc hiểu từng dòng",
+      "Caching có chiến lược: cache-aside vs write-through, invalidation, TTL, chống cache stampede",
+      "Tạo index rồi đo trước/sau; thử composite index sai thứ tự để thấy hậu quả",
+      "Transaction: tái hiện dirty read và phantom read ở từng mức isolation",
+      "Locking: phân biệt optimistic vs pessimistic, khi nào cần distributed lock",
+      "at-least-once vs exactly-once và idempotency key (nối với hệ thanh toán/đặt chỗ)",
+      "Tạo N+1 rồi fix bằng join hoặc dataloader, đo số query"]],
+    ["Tuần 10","Zero-downtime migration & rollback (khối phân biệt senior)",[
+      "Đổi schema trên bảng lớn đang chạy production: chia bước expand → migrate → contract",
+      "Backward-compatible deploy: code cũ và mới chạy song song không vỡ",
+      "Feature flag: bật/tắt tính năng không cần deploy lại",
+      "Viết sẵn kịch bản rollback và điều kiện kích hoạt trước khi deploy"]],
+    ["Tuần 11","Chiến lược test (khối riêng — lỗ hổng lớn nhất)",[
+      "Test pyramid: phân bổ unit / integration / e2e cho một service thật",
+      "Viết ra cái gì KHÔNG đáng test và vì sao",
+      "Mock ở đúng ranh giới: mock cái gì, không mock cái gì",
+      "Integration vs e2e: chọn tầng nào cho từng loại rủi ro",
+      "Thêm test cho phần lõi một project cũ, đo coverage phần quan trọng"]],
+    ["Tuần 12","Security + quan sát hệ thống + checkpoint",[
+      "Đi hết OWASP Top 10, mỗi mục một ví dụ code sai và code đúng",
+      "JWT: tự verify chữ ký, xử lý refresh token và revoke",
+      "Cài rate limiting và CORS cho một API thật; tự tấn công app mình (SQLi/XSS/CSRF)",
+      "Observability: gắn log có cấu trúc + metric + trace vào một API, tự đọc được khi có sự cố",
+      "CHECKPOINT: làm lại đúng bộ test baseline tuần 1, so điểm, cập nhật danh sách lỗ hổng"]]
+  ],
+  checklist:[
+    "3 bản thiết kế system design hoàn chỉnh (sơ đồ + trade-off ghi lại)",
+    "Kịch bản zero-downtime migration + rollback cho 1 tình huống thật",
+    "Bộ test phần lõi 1 project (kèm coverage phần quan trọng)",
+    "20 bài LeetCode Medium đã giải (tree/DP/graph), rải đều các tuần",
+    "Ghi âm 1 lần giải thích trade-off bằng lời",
+    "Kết quả checkpoint tuần 12: điểm trước/sau + lỗ hổng còn lại",
+    "Đọc: Designing Data-Intensive Applications (chương 1–4)"
+  ]},
+
+{ id:"p3", color:"var(--p3)", name:"AI & tích hợp hiện đại", weeks:"Tuần 9–16", start:9, end:16,
+  why:"Kỹ năng phân biệt senior 2024 với 2020. Không phải ML engineer, nhưng phải ship được AI vào sản phẩm và biết ĐO nó tốt lên hay không. Tất cả build thẳng vào flagship, không làm chatbot đồ chơi rồi bỏ.",
+  timeline:[
+    ["Tuần 9–10","AI tools + tích hợp LLM API (build vào flagship)",[
+      "Set up Cursor / Claude Code, làm trọn một task thật đầu đến cuối",
+      "Gọi LLM API: xử lý lỗi, timeout, retry, fallback sang model khác",
+      "Streaming response hiển thị dần ra UI",
+      "Đếm token, cắt context, ước tính chi phí mỗi request",
+      "Đo một task quen: có AI vs không AI, ghi lại số phút; ghi 3 việc AI làm tệ"]],
+    ["Tuần 13–14","Tool calling / structured output + RAG (build thẳng vào flagship)",[
+      "Structured output: ép model trả JSON đúng schema, validate và retry khi sai",
+      "Tool calling: cho model gọi 2–3 hàm thật, xử lý kết quả trả về (dùng nhiều hơn RAG)",
+      "RAG vào flagship: chunk tài liệu, tạo embedding, lưu pgvector, semantic search",
+      "So semantic search với keyword search trên cùng bộ câu hỏi"]],
+    ["Tuần 15","Eval + prompt injection (đo và bảo mật LLM)",[
+      "Eval: lập bộ 10–20 câu có đáp án kỳ vọng, chấm tự động",
+      "Sửa prompt rồi chạy lại eval — chứng minh nó tốt lên bằng số, không bằng cảm giác",
+      "Prompt injection: thử tấn công chính app của mình rồi thêm phòng thủ (nối với tuần security)",
+      "Phân tách rõ system prompt và dữ liệu người dùng"]],
+    ["Tuần 16","AI UX patterns (build vào flagship)",[
+      "Loading: skeleton, typing indicator, cancel giữa chừng",
+      "Fallback khi model lỗi hoặc trả về rác",
+      "Thu feedback thumbs up/down, lưu kèm prompt",
+      "Version hóa prompt, ghi lại kết quả eval thay đổi thế nào"]]
+  ],
+  checklist:[
+    "AI feature thật chạy trong flagship (streaming + tool calling hoặc RAG)",
+    "Bộ eval 10–20 câu + kết quả trước/sau khi sửa prompt",
+    "Ghi chú phòng thủ prompt injection đã áp dụng",
+    "1 bài blog “AI trong workflow của tôi” (1 trong 2 bài tổng)",
+    "Đọc best practices docs của Anthropic/OpenAI"
+  ]},
+
+{ id:"p4", color:"var(--p4)", name:"Portfolio, CV & dự án thực chiến", weeks:"Tuần 11–18", start:11, end:18,
+  why:"Code mới nhất trên GitHub và CV là hai thứ interviewer nhìn đầu tiên. CV quyết định bạn CÓ được phỏng vấn không nên phải viết sớm. Flagship chính là nơi các bài tập AI ở giai đoạn 3 đáp xuống.",
+  timeline:[
+    ["Tuần 11–12","Viết CV bản đầu (sớm — đây là đầu phễu)",[
+      "Viết CV v1 tập trung impact có số liệu, không liệt kê công nghệ suông",
+      "Chốt scope flagship trong một câu: giải quyết vấn đề gì, cho ai",
+      "Vẽ schema và kiến trúc flagship trước khi viết dòng code đầu tiên"]],
+    ["Tuần 13–16","Build flagship: fullstack + AI, deploy production",[
+      "Dựng core feature chạy được đầu đến cuối",
+      "Các bài tập AI (streaming, RAG, tool calling, eval) build THẲNG vào đây",
+      "Deploy production, gắn domain, monitoring cơ bản (nối observability)",
+      "README: ảnh chụp, link demo, lý do đằng sau các quyết định kỹ thuật"]],
+    ["Tuần 16–17","Dọn dẹp các project cũ trên GitHub",[
+      "Liệt kê repo public, chọn giữ 3, ẩn hoặc xóa phần còn lại",
+      "Mỗi repo giữ lại: README, ảnh, hướng dẫn chạy trong 1 phút",
+      "Dọn commit rác, rà lại test phần lõi đã viết ở giai đoạn 2"]],
+    ["Tuần 18","Technical article + open source (tùy chọn)",[
+      "Viết bài blog thứ 2: bài học từ một bug khó hoặc một quyết định kỹ thuật ở flagship",
+      "Đăng, chia sẻ LinkedIn, xin feedback từ 3 người",
+      "Tùy chọn có điều kiện — chỉ làm nếu công ty mục tiêu coi trọng open source: 1 PR docs/bug nhỏ"]]
+  ],
+  checklist:[
+    "1 flagship fullstack + AI, deploy live, có README chuẩn",
+    "1 project thứ hai giải quyết vấn đề thực tế (từ công việc cũ)",
+    "GitHub profile gọn: 3 pinned repo, bio, contribution graph xanh",
+    "CV v1 hoàn chỉnh (bản chung, chưa tailor)",
+    "1 bài technical thứ hai đã đăng (bài AI ở giai đoạn 3 tính riêng)",
+    "Demo 3 phút chuẩn bị sẵn cho mỗi project"
+  ]},
+
+{ id:"p5", color:"var(--p5)", name:"Phỏng vấn thực chiến", weeks:"Tuần 17–24", start:17, end:24,
+  why:"Phỏng vấn là kỹ năng phải luyện, không chỉ là kiến thức. Và apply SỚM: pipeline mất 4–8 tuần, một vòng thật dạy nhiều hơn 10 buổi mock.",
+  timeline:[
+    ["Tuần 17–18","STAR + leadership + research + apply công ty luyện tập",[
+      "Viết 10 câu STAR, mỗi câu ít nhất một số liệu impact",
+      "Chuẩn bị tín hiệu leadership: mentoring, dẫn dắt quyết định kỹ thuật, làm việc xuyên team",
+      "Research 5–10 công ty: stack, sản phẩm, quy mô team, lương tham khảo",
+      "Apply nhóm CÔNG TY LUYỆN TẬP ngay (không phải mục tiêu chính) — lấy phỏng vấn thật làm bài học"]],
+    ["Tuần 19–20","Mock 2 buổi/tuần + bắt đầu apply công ty mục tiêu",[
+      "Đặt lịch cố định 2 buổi/tuần vào calendar, có tên người cụ thể",
+      "Buổi coding: bắt buộc nói ra suy nghĩ trong lúc code",
+      "Buổi system design: 45 phút, chạy đúng template 6 bước",
+      "Tailor CV cho 3 công ty đầu bảng rồi apply nhóm mục tiêu"]],
+    ["Tuần 21–22","Vòng phỏng vấn thật, rút kinh nghiệm nhanh",[
+      "Note lại câu hỏi trong vòng 24h sau mỗi vòng",
+      "Sau mỗi buổi: 3 điều làm tốt và 1 điều sửa ngay vòng sau",
+      "Đọc blog kỹ thuật hoặc GitHub công ty, chuẩn bị 2 câu hỏi ngược"]],
+    ["Tuần 23–24","Chốt và đàm phán",[
+      "Đàm phán: không nói số đầu tiên, hỏi range trước",
+      "So offer theo tổng thu nhập, không chỉ lương cứng",
+      "Chuẩn bị 3 reference sẵn sàng được liên hệ"]]
+  ],
+  checklist:[
+    "10 câu STAR viết sẵn + 3 câu chuyện leadership",
+    "Bảng research 5–10 công ty (stack, lương, người quen)",
+    "CV đã tailor cho 3 công ty đầu bảng",
+    "Negotiation script cho offer",
+    "3 reference sẵn sàng được liên hệ",
+    "Nhật ký phỏng vấn: câu hỏi + bài học sau mỗi vòng"
+  ]}
+];
+
+const SIDE = [
+  ["Vol 0 — Mạng & bảo mật",["HTTPS bắt tay thế nào, vì sao cần certificate","SSO và OAuth flow: vẽ lại bằng trí nhớ","Lưu mật khẩu an toàn: hash, salt, vì sao không dùng MD5","DNS lookup đi qua những đâu"]],
+  ["Vol 0 — API",["REST vs GraphQL vs RPC: chọn cái nào khi nào","Pagination cursor vs offset, và vì sao offset vỡ ở trang sâu","Idempotency key: khi nào bắt buộc phải có","Thiết kế error response nhất quán"]],
+  ["Vol 0 — Trình duyệt",["Gõ URL rồi chuyện gì xảy ra — kể đủ 8 bước","Critical rendering path: parse, layout, paint, composite","Reflow vs repaint, thứ gì làm trang giật","Cache: HTTP cache, service worker, CDN"]],
+  ["Vol 0 — Vận hành",["Deployment strategies: blue-green, canary, rolling","Container: image layer, vì sao build chậm","Microservices gọi nhau: sync, async, saga","Quan sát hệ thống: log, metric, trace"]],
+  ["Vol 1 — System design cốt lõi",["Framework 4 bước + back-of-envelope estimation","Rate limiter và consistent hashing","Key-value store phân tán: replication, quorum","Unique ID generator và URL shortener","Notification system và news feed"]],
+  ["Vol 2 — System design nâng cao",["Distributed message queue: ordering, delivery semantics","Metrics monitoring và alerting","Payment system: idempotency, reconciliation","Proximity service: geohash, quadtree","Object storage kiểu S3: chunk, metadata"]]
+];
+
+const KEY = "roadmap24:v3";
+let state = {};
+
+/* Lưu trữ đa tầng, không cần backend:
+   - Mở trong Claude  -> window.storage (theo tài khoản)
+   - Tải file mở rời   -> localStorage (theo trình duyệt/máy này)
+   - Không dùng được cả hai -> giữ tạm trong phiên
+   Muốn xem tiến độ ở máy khác: bấm "Xuất tiến độ" (tải file .json),
+   mang file sang máy kia rồi bấm "Nhập tiến độ". */
+const store = (() => {
+  const hasWS = typeof window !== "undefined" && window.storage
+             && typeof window.storage.get === "function";
+  let hasLS = false;
+  try { localStorage.setItem("__t","1"); localStorage.removeItem("__t"); hasLS = true; }
+  catch(e){ hasLS = false; }
+  const mem = {};
+  return {
+    place: hasWS ? "Claude" : hasLS ? "trình duyệt này" : "phiên này",
+    async get(k){
+      if(hasWS){ const r = await window.storage.get(k); return r && r.value != null ? r.value : null; }
+      if(hasLS){ return localStorage.getItem(k); }
+      return k in mem ? mem[k] : null;
+    },
+    async set(k,v){
+      if(hasWS){ await window.storage.set(k,v); return; }
+      if(hasLS){ localStorage.setItem(k,v); return; }
+      mem[k] = v;
+    },
+    async del(k){
+      if(hasWS){ try{ await window.storage.delete(k); }catch(e){} return; }
+      if(hasLS){ localStorage.removeItem(k); return; }
+      delete mem[k];
+    }
+  };
+})();
+
+const esc = s => s.replace(/&/g,"&amp;").replace(/</g,"&lt;");
+const CHEV = '<svg class="chev" viewBox="0 0 12 12" width="12" height="12" aria-hidden="true"><path d="M4 2l4 4-4 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>';
+
+function block(pid, i, week, title, subs){
+  const bid = pid+"-b"+i;
+  return `<li class="block" data-block="${bid}">
+    <div class="head" role="button" tabindex="0" aria-expanded="false">
+      ${CHEV}
+      <input class="box" type="checkbox" data-parent="${bid}" aria-label="Đánh dấu xong cả khối">
+      <span class="txt"><span class="wk">${esc(week)}</span>${esc(title)}</span>
+      <span class="count">0/${subs.length}</span>
+    </div>
+    <ul class="subs">
+      ${subs.map((s,j)=>`<li class="item">
+        <input class="box leaf" type="checkbox" id="${bid}-${j}" data-of="${bid}">
+        <label class="txt" for="${bid}-${j}">${esc(s)}</label></li>`).join("")}
+    </ul>
+  </li>`;
+}
+
+document.getElementById("phases").innerHTML = PHASES.map(p => `
+  <section class="phase" id="${p.id}" style="--dot:${p.color}">
+    <div class="phase-top">
+      <h2><span class="dot"></span>${esc(p.name)}</h2>
+      <span class="weeks">${esc(p.weeks)}</span>
+    </div>
+    <p class="why">${esc(p.why)}</p>
+    <div class="phase-meter"><div class="meter"><i></i></div><em>0/0</em></div>
+    <div class="label"><span>Lịch theo tuần</span><button class="expand" data-toggle="${p.id}">Mở tất cả</button></div>
+    <ul>${p.timeline.map((t,i)=>block(p.id,i,t[0],t[1],t[2])).join("")}</ul>
+    <div class="label"><span>Checklist</span></div>
+    <ul>${p.checklist.map((c,i)=>`<li class="item">
+        <input class="box leaf" type="checkbox" id="${p.id}-c${i}">
+        <label class="txt" for="${p.id}-c${i}">${esc(c)}</label></li>`).join("")}</ul>
+  </section>`).join("");
+
+document.getElementById("side-list").innerHTML =
+  SIDE.map((s,i)=>block("fs",i,"",s[0],s[1])).join("");
+
+document.getElementById("track").innerHTML = PHASES.map(p=>{
+  const left=(p.start-1)/24*100, w=(p.end-p.start+1)/24*100;
+  return `<div class="track"><button class="bar" style="left:${left}%;width:${w}%;background:${p.color}"
+    data-go="${p.id}" title="${esc(p.name)} · ${esc(p.weeks)}">${esc(p.name)}</button></div>`;
+}).join("");
+
+document.getElementById("track").addEventListener("click", e=>{
+  const b=e.target.closest("[data-go]");
+  if(b) document.getElementById(b.dataset.go).scrollIntoView({behavior:"smooth",block:"start"});
+});
+
+/* mở / đóng khối */
+function toggleBlock(el, force){
+  const open = force===undefined ? !el.classList.contains("open") : force;
+  el.classList.toggle("open", open);
+  el.querySelector(".head").setAttribute("aria-expanded", open);
+}
+document.addEventListener("click", e=>{
+  if(e.target.closest(".box")) return;
+  const h = e.target.closest(".head");
+  if(h) toggleBlock(h.closest(".block"));
+});
+document.addEventListener("keydown", e=>{
+  if((e.key==="Enter"||e.key===" ") && e.target.classList.contains("head")){
+    e.preventDefault(); toggleBlock(e.target.closest(".block"));
+  }
+});
+document.querySelectorAll(".expand").forEach(btn=>{
+  btn.addEventListener("click", ()=>{
+    const scope = btn.dataset.toggle==="side"
+      ? document.getElementById("side-list")
+      : document.getElementById(btn.dataset.toggle);
+    const blocks=[...scope.querySelectorAll(".block")];
+    const open = !blocks.every(b=>b.classList.contains("open"));
+    blocks.forEach(b=>toggleBlock(b,open));
+    btn.textContent = open ? "Thu gọn" : "Mở tất cả";
+  });
+});
+
+/* tiến độ */
+const leaves = [...document.querySelectorAll(".leaf")];
+const parents = [...document.querySelectorAll("[data-parent]")];
+
+function paint(){
+  leaves.forEach(b=>{
+    b.checked = !!state[b.id];
+    b.closest(".item").classList.toggle("done", b.checked);
+  });
+  parents.forEach(p=>{
+    const kids=[...document.querySelectorAll(`[data-of="${p.dataset.parent}"]`)];
+    const d=kids.filter(k=>k.checked).length;
+    p.checked = d===kids.length;
+    p.classList.toggle("partial", d>0 && d<kids.length);
+    const blk=p.closest(".block");
+    blk.querySelector(".count").textContent = d+"/"+kids.length;
+    blk.classList.toggle("full", d===kids.length);
+  });
+  const done=leaves.filter(b=>b.checked).length;
+  const pct=Math.round(done/leaves.length*100);
+  document.getElementById("s-done").textContent=done;
+  document.getElementById("s-total").textContent=leaves.length;
+  document.getElementById("s-pct").textContent=pct+"%";
+  document.getElementById("s-bar").style.width=pct+"%";
+  const chk=leaves.filter(b=>/-c\d+$/.test(b.id));
+  document.getElementById("s-check").textContent=chk.filter(b=>b.checked).length+"/"+chk.length;
+
+  PHASES.forEach(p=>{
+    const sec=document.getElementById(p.id);
+    const bs=[...sec.querySelectorAll(".leaf")];
+    const d=bs.filter(b=>b.checked).length;
+    sec.querySelector(".meter i").style.width=Math.round(d/bs.length*100)+"%";
+    sec.querySelector(".phase-meter em").textContent=d+"/"+bs.length;
+  });
+}
+
+let t;
+function flash(){
+  const el=document.getElementById("saved");
+  el.classList.add("on"); clearTimeout(t);
+  t=setTimeout(()=>el.classList.remove("on"),1200);
+}
+async function save(){
+  try{ await store.set(KEY, JSON.stringify(state)); flash(); }
+  catch(e){ console.warn("Không lưu được, tiến độ chỉ giữ trong phiên này", e); }
+}
+async function load(){
+  try{
+    const v = await store.get(KEY);
+    if(v) state = JSON.parse(v);
+  }catch(e){ state = {}; }
+  const w = document.getElementById("where");
+  if(w) w.textContent = "Lưu ở: " + store.place;
+  paint();
+}
+
+leaves.forEach(b=>b.addEventListener("change",()=>{
+  if(b.checked) state[b.id]=1; else delete state[b.id];
+  paint(); save();
+}));
+parents.forEach(p=>p.addEventListener("change",()=>{
+  document.querySelectorAll(`[data-of="${p.dataset.parent}"]`).forEach(k=>{
+    if(p.checked) state[k.id]=1; else delete state[k.id];
+  });
+  paint(); save();
+}));
+
+document.getElementById("reset").addEventListener("click", async ()=>{
+  if(!confirm("Xóa toàn bộ tiến độ đã tích?")) return;
+  state={}; paint();
+  await store.del(KEY);
+});
+
+/* --- Xuất / Nhập tiến độ (không cần backend) --- */
+function exportProgress(){
+  const done = leaves.filter(b=>b.checked).length;
+  const payload = { app:"roadmap24", v:3, savedAt:new Date().toISOString(), done, total:leaves.length, state };
+  const json = JSON.stringify(payload, null, 2);
+  const blob = new Blob([json], {type:"application/json"});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  const d = new Date().toISOString().slice(0,10);
+  a.href = url; a.download = "tien-do-lo-trinh-" + d + ".json";
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(()=>URL.revokeObjectURL(url), 1000);
+  flash();
+}
+function applyImport(text){
+  let obj;
+  try{ obj = JSON.parse(text); }
+  catch(e){ alert("File không đọc được — có vẻ không phải file tiến độ hợp lệ."); return; }
+  const incoming = obj && obj.state ? obj.state : obj;
+  if(!incoming || typeof incoming !== "object"){ alert("Không tìm thấy dữ liệu tiến độ trong file."); return; }
+  const replace = confirm("Nhập tiến độ từ file?\n\nOK = thay thế tiến độ hiện tại\nHủy = gộp thêm vào tiến độ đang có");
+  state = replace ? incoming : Object.assign({}, state, incoming);
+  paint(); save();
+}
+document.getElementById("export").addEventListener("click", exportProgress);
+const fileInput = document.getElementById("file");
+document.getElementById("import").addEventListener("click", ()=>fileInput.click());
+fileInput.addEventListener("change", e=>{
+  const f = e.target.files[0]; if(!f) return;
+  const r = new FileReader();
+  r.onload = ()=>applyImport(String(r.result));
+  r.readAsText(f);
+  e.target.value = "";
+});
+
+load();
+</script>
