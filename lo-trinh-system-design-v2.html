@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Lộ trình System Design · 12 tuần</title>
+<title>Lộ trình System Design · 12 tuần + mở rộng</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -154,6 +154,44 @@
     .wk{opacity:0;transform:translateY(12px);animation:rise .5s ease forwards}
     @keyframes rise{to{opacity:1;transform:none}}
   }
+
+  /* ---- câu hỏi kiểm tra ---- */
+  details.qa{margin-top:14px;border:1px solid var(--line);border-radius:10px;background:#FAFBF9}
+  details.qa summary{
+    cursor:pointer;list-style:none;padding:11px 15px;font-size:14.5px;font-weight:500;color:var(--ink);
+    display:flex;align-items:center;gap:8px;
+  }
+  details.qa summary::-webkit-details-marker{display:none}
+  details.qa summary::before{content:"▸";color:var(--bc);transition:transform .15s;font-size:13px}
+  details.qa[open] summary::before{transform:rotate(90deg)}
+  details.qa .q{padding:12px 15px 14px;border-top:1px solid var(--line-soft)}
+  .qh{font-size:15px;color:var(--ink);font-weight:500;margin-bottom:8px}
+  .k{
+    font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;
+    border-radius:100px;padding:2px 9px;margin-right:9px;vertical-align:2px;font-weight:400;border:1px solid;
+  }
+  .k-kn{color:#0F6E56;background:#E4F1EB;border-color:#B9DECF}
+  .k-cl{color:#534AB7;background:#EEEDFB;border-color:#CFCBF0}
+  .k-x10{color:#BC5227;background:#FBEAE2;border-color:#F0C9B7}
+  .k-br{color:#8A2B2B;background:#FBE6E6;border-color:#EFC3C3}
+  .ans{font-size:14.5px;color:var(--ink-soft)}
+  .ans b{
+    display:block;font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.07em;
+    text-transform:uppercase;color:var(--ink-faint);font-weight:400;margin-bottom:2px;
+  }
+  .ans ul{margin-top:4px}
+  .ans ul li{font-size:14.5px;margin-bottom:4px}
+  .card h3 .t-must{color:#0F6E56;background:#E4F1EB;border-color:#B9DECF}
+  .card h3 .t-should{color:#534AB7;background:#EEEDFB;border-color:#CFCBF0}
+  .card h3 .t-opt{color:#7C857E;background:#F1F2EE;border-color:#DCE0D8}
+  .closing .sched{margin:0 0 16px;position:relative;z-index:1}
+  .closing .sched .t{font-family:'IBM Plex Mono',monospace;font-size:12px;color:#6FB79E;margin-bottom:7px;letter-spacing:.05em}
+  .closing .sched .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+  @media(min-width:640px){.closing .sched .grid{grid-template-columns:repeat(4,1fr)}.closing .sched .grid.g3{grid-template-columns:repeat(3,1fr)}}
+  .closing .sched .grid span{
+    background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:8px;
+    padding:8px 11px;font-size:13px;color:#EAEDE7;line-height:1.4;
+  }
 </style>
 </head>
 <body>
@@ -162,15 +200,36 @@
   <header>
     <div class="eyebrow">Từ con số 0 · Senior fullstack</div>
     <h1>Mười hai tuần<br><em>System Design</em></h1>
-    <p class="lead">Bám sách Alex Xu, mỗi tuần một mốc. Đích đến không phải đọc hết sách, mà là đứng vẽ được một hệ thống trong 45 phút và tự nói ra chỗ nó sẽ vỡ.</p>
+    <p class="lead">Bám hai tập sách Alex Xu (Vol 1 và Vol 2), mỗi tuần một mốc. Đích đến không phải đọc hết sách, mà là đứng vẽ được một hệ thống trong 45 phút và tự nói ra chỗ nó sẽ vỡ.</p>
     <div class="meta">
       <span><b>12 tuần</b> · ~7h mỗi tuần</span>
-      <span><b>16</b> case</span>
+      <span><b>12</b> case chính · <b>+10</b> case mở rộng</span>
       <span><b>2</b> tuần nặng cần né việc gấp</span>
+      <span><b>+6</b> tuần mở rộng (Vol 2)</span>
     </div>
   </header>
 
   <main class="rail">
+
+    <div class="band" style="--bc:var(--accent);--bbg:#E2F0EB;--bbd:#B9DECF">
+      <h2>Khung chung</h2><span class="rng">Vol 1 · chương 3</span>
+      <span class="note">dùng cho mọi case, đọc trước tuần 1</span>
+    </div>
+
+    <div class="wk" style="--bc:var(--accent);animation-delay:.02s">
+      <div class="node sym">⏱</div>
+      <div class="card">
+        <div class="kicker">Bốn bước · 45 phút</div>
+        <h3>Khung phỏng vấn của Alex Xu</h3>
+        <ul>
+          <li><b>Bước 1 · Hiểu đề và chốt scope</b> — 3–10 phút. Hỏi trước, vẽ sau: tính năng, quy mô, ràng buộc, giả định.</li>
+          <li><b>Bước 2 · Thiết kế high-level và xin buy-in</b> — 10–15 phút. API, data model, sơ đồ khối; hỏi interviewer “bản này ổn chưa?”.</li>
+          <li><b>Bước 3 · Deep dive</b> — 10–25 phút. Chọn 2–3 thành phần quan trọng nhất, nói rõ trade-off.</li>
+          <li><b>Bước 4 · Wrap-up</b> — 3–5 phút. Bottleneck, xử lý lỗi, monitoring, hướng mở rộng.</li>
+        </ul>
+        <div class="say"><div class="lab">Ba câu hỏi lặp lại ở mọi tuần</div><q>Clarify gì trước? Traffic ×10 thì gì vỡ trước? Một AZ chết thì sao?</q></div>
+      </div>
+    </div>
 
     <div class="band" style="--bc:var(--p1);--bbg:#EEEFEB;--bbd:#DCE0D8">
       <h2>Nền tảng</h2><span class="rng">tuần 1–2</span>
@@ -185,17 +244,30 @@
         <p>Chương 1 dẫn từng bước: tách DB → load balancer → replication → cache → CDN → sharding. Đọc chậm, mỗi bước tự hỏi hệ thống mình đang làm nằm ở đâu trong chuỗi đó. Song song, làm 5 bài ước lượng bằng giấy, 15 phút mỗi bài, đến khi thành phản xạ.</p>
         <div class="say"><div class="lab">Cuối tuần nói được</div><q>1 triệu request mỗi ngày là bao nhiêu QPS, và cần mấy server?</q></div>
         <div class="chips"><span class="lab">Vol 0</span><span class="chip">Scale a website · 55</span><span class="chip">Back-of-envelope · 157</span></div>
+        <details class="qa"><summary>Kiểm tra cuối tuần · 4 câu</summary>
+          <div class="q"><div class="qh"><span class="k k-kn">Kiến thức</span>1 triệu request mỗi ngày là bao nhiêu QPS? Peak là bao nhiêu? Một server có đủ không?</div><div class="ans"><b>Đáp án đạt</b><ul><li>1 ngày ≈ 10⁵ giây ⇒ 10⁶ / 10⁵ ≈ 10–12 QPS trung bình.</li><li>Nêu giả định peak (thường ×2–×5) ⇒ vài chục QPS.</li><li>Kết luận: một server vừa đủ, chưa cần scale ngang — nhưng nên chừa single point of failure (≥2 server sau load balancer).</li></ul></div></div>
+          <div class="q"><div class="qh"><span class="k k-kn">Kiến thức</span>Web tier cần stateless để làm gì, và session đưa đi đâu?</div><div class="ans"><b>Đáp án đạt</b><ul><li>Stateless để thêm/bớt server tuỳ ý sau load balancer, request nào vào server nào cũng được.</li><li>Session/state đẩy ra kho dùng chung (Redis hoặc NoSQL), không giữ trong bộ nhớ web server.</li></ul></div></div>
+          <div class="q"><div class="qh"><span class="k k-kn">Kiến thức</span>Nêu 4 bước của khung phỏng vấn và chia thời gian cho 45 phút.</div><div class="ans"><b>Đáp án đạt</b><ul><li>1) Hiểu đề + chốt scope: 3–10′. 2) Thiết kế high-level + xin buy-in: 10–15′. 3) Deep dive: 10–25′. 4) Wrap-up: 3–5′.</li><li>Điểm trừ lớn nhất: vẽ ngay mà không hỏi, hoặc nhảy vào chi tiết khi chưa được đồng ý với bản high-level.</li></ul></div></div>
+          <div class="q"><div class="qh"><span class="k k-cl">Clarify</span>Đề: “Thiết kế news feed”. Ba câu hỏi đầu tiên của bạn?</div><div class="ans"><b>Đáp án đạt</b><ul><li>Mobile, web hay cả hai? Tính năng cốt lõi: đăng bài, xem feed (có ảnh/video không)?</li><li>Feed sắp xếp theo thời gian hay ranking? Mỗi người tối đa bao nhiêu bạn bè?</li><li>Quy mô: bao nhiêu DAU, QPS đọc/ghi? — rồi mới vẽ.</li></ul></div></div>
+        </details>
       </div>
     </div>
 
     <div class="wk" style="--bc:var(--p1);animation-delay:.1s">
       <div class="node">2</div>
       <div class="card">
-        <div class="kicker">8 viên gạch · chương 5</div>
+        <div class="kicker">8 viên gạch · Vol 0 + Vol 1 chương 5 (consistent hashing)</div>
         <h3>Building block</h3>
         <p>Load balancer, cache, CDN, replication, sharding, SQL/NoSQL, message queue, consistency model. Mỗi cái chỉ cần trả lời ba câu: dùng khi nào, trả giá gì, vỡ ở đâu khi scale. Consistent hashing để cuối tuần.</p>
         <div class="say"><div class="lab">Cuối tuần nói được</div><q>Cache chết thì hệ thống chậm đi hay sập hẳn?</q></div>
         <div class="chips"><span class="lab">Vol 0</span><span class="chip">Cache strategies · 71</span><span class="chip">CDN · 84</span><span class="chip">Partitioning · 82</span><span class="chip">Read replica · 103</span></div>
+        <details class="qa"><summary>Kiểm tra cuối tuần · 4 câu</summary>
+          <div class="q"><div class="qh"><span class="k k-br">Vỡ</span>Cache chết thì hệ thống chậm đi hay sập hẳn?</div><div class="ans"><b>Đáp án đạt</b><ul><li>Với cache-aside: toàn bộ read đổ về DB. Nếu hit ratio 90%, DB đột ngột nhận gấp ~10× tải đọc ⇒ có thể sập (cache stampede).</li><li>Giảm nhẹ: cache nhiều replica/cluster, warm-up trước khi nhận traffic, gộp request cùng key, rate limit ở DB.</li></ul></div></div>
+          <div class="q"><div class="qh"><span class="k k-kn">Kiến thức</span>Consistent hashing giải quyết gì so với hash(key) % N? Virtual node để làm gì?</div><div class="ans"><b>Đáp án đạt</b><ul><li>hash % N: thêm/bớt server làm gần như mọi key đổi server ⇒ cache miss hàng loạt.</li><li>Consistent hashing: chỉ di chuyển phần key liền kề trên vòng (≈ k/n key).</li><li>Virtual node: mỗi server nhiều điểm trên vòng ⇒ phân phối đều hơn, tránh hotspot.</li></ul></div></div>
+          <div class="q"><div class="qh"><span class="k k-br">Vỡ</span>User đăng bài xong reload không thấy bài của mình (replication lag). Xử lý sao?</div><div class="ans"><b>Đáp án đạt</b><ul><li>Read-your-writes: một khoảng ngắn sau khi ghi thì đọc từ primary (hoặc định tuyến theo timestamp lần ghi).</li><li>Người khác thấy chậm vài giây là chấp nhận được (eventual consistency).</li></ul></div></div>
+          <div class="q"><div class="qh"><span class="k k-kn">Kiến thức</span>Khi nào chọn NoSQL thay vì SQL?</div><div class="ans"><b>Đáp án đạt</b><ul><li>NoSQL khi cần latency rất thấp, dữ liệu phi cấu trúc/không quan hệ, hoặc khối lượng dữ liệu khổng lồ cần scale ngang.</li><li>Mặc định vẫn là SQL khi cần quan hệ, transaction, ACID.</li></ul></div></div>
+        </details>
+        <div class="chips"><span class="lab">Ôn lại 20′</span><span class="chip">Không có — tuần nền tảng</span></div>
       </div>
     </div>
 
@@ -211,6 +283,12 @@
         <h3>URL shortener</h3>
         <p>Case dễ nhất, nên dùng nó để tập quy trình chứ không phải để học kiến thức mới. Làm lần hai cách lần một vài ngày. Đây cũng là tuần đầu tiên bắt buộc nói to thành tiếng như đang giải thích cho người khác.</p>
         <div class="say"><div class="lab">Cuối tuần nói được</div><q>Hash hay counter, và va chạm thì xử lý thế nào?</q></div>
+        <details class="qa"><summary>Kiểm tra cuối tuần · 4 câu</summary>
+          <div class="q"><div class="qh"><span class="k k-cl">Clarify</span>Hỏi gì trước khi vẽ URL shortener? Con số bạn kỳ vọng?</div><div class="ans"><b>Đáp án đạt</b><ul><li>Lượng URL mới/ngày, tỉ lệ đọc:ghi, độ dài URL ngắn, ký tự cho phép, có xoá/cập nhật không, thời hạn lưu.</li><li>Ví dụ trong sách: 100 triệu URL/ngày ≈ 1.160 write/s; đọc:ghi = 10:1 ≈ 11.600 read/s; lưu 10 năm ≈ 365 tỉ bản ghi.</li></ul></div></div>
+          <div class="q"><div class="qh"><span class="k k-kn">Kiến thức</span>Độ dài mã ngắn tối thiểu là bao nhiêu? Hash + xử lý va chạm hay base62 từ ID?</div><div class="ans"><b>Đáp án đạt</b><ul><li>62⁷ ≈ 3,5 nghìn tỉ > 365 tỉ ⇒ 7 ký tự là đủ.</li><li>Hash (CRC32/MD5/SHA-1 cắt 7 ký tự): ngắn cố định nhưng va chạm ⇒ phải kiểm tra DB (bloom filter giảm query) rồi hash lại.</li><li>Base62 từ ID duy nhất: không va chạm, nhưng độ dài tăng dần và ID đoán được; cần bộ sinh ID phân tán.</li></ul></div></div>
+          <div class="q"><div class="qh"><span class="k k-kn">Kiến thức</span>301 hay 302? Ảnh hưởng thế nào?</div><div class="ans"><b>Đáp án đạt</b><ul><li>301 (permanent): trình duyệt cache ⇒ giảm tải server nhưng mất số liệu click.</li><li>302 (temporary): mỗi lần click đều qua server ⇒ làm analytics được. Chọn theo yêu cầu.</li></ul></div></div>
+          <div class="q"><div class="qh"><span class="k k-x10">×10</span>Traffic ×10 thì cái gì vỡ trước?</div><div class="ans"><b>Đáp án đạt</b><ul><li>Đọc vọt lên >100K QPS: URL phổ biến lặp lại nhiều ⇒ cache (Redis) hấp thụ phần lớn; thêm read replica.</li><li>DB lưu trữ ~vài chục TB: shard theo hash của mã ngắn khi cần. Thêm rate limiter chống abuse.</li></ul></div></div>
+        </details>
       </div>
     </div>
 
@@ -222,6 +300,13 @@
         <p>Hai case ngắn cùng dạy một kỹ năng: chọn thuật toán rồi bảo vệ lựa chọn đó. Token bucket cho phép burst, sliding window thì mượt hơn nhưng tốn bộ nhớ. Bên kia là Snowflake, và chuyện gì xảy ra khi NTP kéo đồng hồ nhảy ngược.</p>
         <div class="say"><div class="lab">Cuối tuần nói được</div><q>Counter đặt ở Redis thì race condition xử lý ra sao?</q></div>
         <div class="chips"><span class="lab">Vol 0</span><span class="chip">Optimistic locking · 65</span><span class="chip">Isolation levels · 4</span></div>
+        <details class="qa"><summary>Kiểm tra cuối tuần · 4 câu</summary>
+          <div class="q"><div class="qh"><span class="k k-cl">Clarify</span>Rate limiter: hỏi gì trước?</div><div class="ans"><b>Đáp án đạt</b><ul><li>Client-side hay server-side (middleware/API gateway)? Giới hạn theo IP, user hay key khác? Quy mô, môi trường phân tán?</li><li>Có cần thông báo cho user bị chặn: trả HTTP 429 kèm X-Ratelimit-Remaining / X-Ratelimit-Limit / Retry-After.</li></ul></div></div>
+          <div class="q"><div class="qh"><span class="k k-kn">Kiến thức</span>So sánh token bucket, fixed window và sliding window. Chọn cái nào?</div><div class="ans"><b>Đáp án đạt</b><ul><li>Token bucket: 2 tham số (bucket size, refill rate), cho phép burst, tốn ít bộ nhớ (Amazon, Stripe dùng).</li><li>Fixed window: burst ở rìa cửa sổ có thể cho qua gấp đôi quota.</li><li>Sliding window log: chính xác nhưng tốn bộ nhớ (lưu timestamp); sliding window counter: xấp xỉ, nhẹ — nói rõ trade-off.</li></ul></div></div>
+          <div class="q"><div class="qh"><span class="k k-br">Vỡ</span>Counter đặt ở Redis thì race condition xử lý sao? Nhiều rate limiter thì đồng bộ thế nào?</div><div class="ans"><b>Đáp án đạt</b><ul><li>Đọc-rồi-ghi (get/set) không nguyên tử ⇒ 2 request cùng thấy cùng giá trị. Dùng Lua script hoặc sorted set để thao tác nguyên tử.</li><li>Nhiều instance: dùng kho dùng chung (Redis tập trung) thay vì sticky session.</li></ul></div></div>
+          <div class="q"><div class="qh"><span class="k k-kn">Kiến thức</span>Snowflake ID gồm những phần nào? Khi NTP kéo đồng hồ nhảy ngược thì sao?</div><div class="ans"><b>Đáp án đạt</b><ul><li>1 bit dấu, 41 bit timestamp, 5 bit datacenter, 5 bit machine, 12 bit sequence ⇒ 4096 ID/ms/máy.</li><li>Đồng hồ lùi có thể sinh ID trùng/ngược thứ tự: từ chối sinh/ chờ tới khi đồng hồ vượt mốc cuối, dùng NTP chỉnh dần thay vì nhảy.</li></ul></div></div>
+        </details>
+        <div class="chips"><span class="lab">Ôn lại 20′</span><span class="chip">URL shortener (tuần 3) — làm lại từ trí nhớ</span></div>
       </div>
     </div>
 
@@ -232,6 +317,13 @@
         <h3>Key-value store <span class="tag">nặng</span></h3>
         <p>Nặng nhất Vol 1 và cũng là bài trả cổ tức: quorum, vector clock, LSM tree, SSTable, Merkle tree. Học xong thì mọi case sau nhẹ đi một nửa vì các khái niệm này quay lại liên tục. Hiểu được 70% là đi tiếp, đừng kẹt lại chờ hiểu hết.</p>
         <div class="say"><div class="lab">Cuối tuần nói được</div><q>R + W &gt; N cho bạn cái gì, và trả giá bằng cái gì?</q></div>
+        <details class="qa"><summary>Kiểm tra cuối tuần · 4 câu</summary>
+          <div class="q"><div class="qh"><span class="k k-kn">Kiến thức</span>R + W &gt; N cho bạn cái gì và trả giá bằng cái gì?</div><div class="ans"><b>Đáp án đạt</b><ul><li>N bản sao, W = số node phải ack ghi, R = số node phải trả lời đọc. R + W > N ⇒ tập đọc và tập ghi luôn giao nhau ⇒ đọc thấy bản mới nhất (strong consistency).</li><li>Giá phải trả: latency bị quyết định bởi node chậm nhất trong quorum; W=1,R=N ghi nhanh/đọc chậm và ngược lại.</li></ul></div></div>
+          <div class="q"><div class="qh"><span class="k k-kn">Kiến thức</span>KV store kiểu Dynamo chọn gì trong CAP? Khi network partition thì sao?</div><div class="ans"><b>Đáp án đạt</b><ul><li>Chọn AP: vẫn nhận ghi ở cả hai phía partition, chấp nhận không nhất quán rồi hoà giải sau (vector clock, anti-entropy).</li><li>CP sẽ chặn ghi ở phía không đủ quorum.</li></ul></div></div>
+          <div class="q"><div class="qh"><span class="k k-kn">Kiến thức</span>Phát hiện lỗi, xử lý lỗi tạm thời và vĩnh viễn như thế nào?</div><div class="ans"><b>Đáp án đạt</b><ul><li>Gossip protocol (heartbeat counter) thay vì multicast — không scale.</li><li>Lỗi tạm thời: sloppy quorum + hinted handoff. Lỗi lâu dài: anti-entropy bằng Merkle tree để đồng bộ bản sao.</li><li>Xung đột phiên bản: vector clock [server, version] — nhược: phức tạp, vector dài.</li></ul></div></div>
+          <div class="q"><div class="qh"><span class="k k-kn">Kiến thức</span>Mô tả write path và read path của một node.</div><div class="ans"><b>Đáp án đạt</b><ul><li>Ghi: commit log → memtable → khi đầy thì flush thành SSTable.</li><li>Đọc: memtable → bloom filter chỉ ra SSTable nào có thể chứa key → đọc SSTable (merge).</li></ul></div></div>
+        </details>
+        <div class="chips"><span class="lab">Ôn lại 20′</span><span class="chip">Rate limiter / Unique ID (tuần 4)</span></div>
       </div>
     </div>
 
@@ -243,6 +335,13 @@
         <p>Lần đầu gặp queue thật sự nằm giữa hệ thống chứ không phải chỉ nghe tên. Retry, exponential backoff, dedup, và lý do consumer bắt buộc phải idempotent — thứ sẽ quay lại ở tuần 10 dưới dạng tiền bạc.</p>
         <div class="say"><div class="lab">Cuối tuần nói được</div><q>Queue giao at-least-once thì consumer phải làm gì?</q></div>
         <div class="chips"><span class="lab">Vol 0</span><span class="chip">Exactly once · 80</span><span class="chip">Duplicate URLs · 44</span></div>
+        <details class="qa"><summary>Kiểm tra cuối tuần · 4 câu</summary>
+          <div class="q"><div class="qh"><span class="k k-kn">Kiến thức</span>Queue giao at-least-once thì consumer phải làm gì?</div><div class="ans"><b>Đáp án đạt</b><ul><li>Idempotent: dedupe theo event ID (đã xử lý/gửi chưa thì bỏ qua).</li><li>Retry kèm exponential backoff. Không thể đảm bảo exactly-once, chỉ giảm trùng bằng dedupe.</li></ul></div></div>
+          <div class="q"><div class="qh"><span class="k k-br">Vỡ</span>Provider push notification (hoặc SMS) chậm/chết thì sao?</div><div class="ans"><b>Đáp án đạt</b><ul><li>Mỗi loại thông báo (iOS, Android, SMS, email) một queue riêng ⇒ cô lập lỗi, không kéo cả hệ thống.</li><li>Lưu notification log vào DB trước khi gửi để retry khi crash.</li></ul></div></div>
+          <div class="q"><div class="qh"><span class="k k-kn">Kiến thức</span>Web crawler: BFS hay DFS? URL frontier giải quyết những gì?</div><div class="ans"><b>Đáp án đạt</b><ul><li>BFS (DFS có thể đi sâu vô hạn). Frontier lo: politeness (mỗi host một queue, 1 worker/host + delay), priority, freshness.</li><li>Tôn trọng robots.txt (tải và cache).</li></ul></div></div>
+          <div class="q"><div class="qh"><span class="k k-kn">Kiến thức</span>Tránh crawl trùng và spider trap thế nào?</div><div class="ans"><b>Đáp án đạt</b><ul><li>Bloom filter / lưu hash URL đã gặp; hash nội dung để phát hiện trang trùng.</li><li>Spider trap: giới hạn độ dài URL/độ sâu, blacklist thủ công.</li></ul></div></div>
+        </details>
+        <div class="chips"><span class="lab">Ôn lại 20′</span><span class="chip">Key-value store (tuần 5)</span></div>
       </div>
     </div>
 
@@ -259,6 +358,13 @@
         <p>Bài kinh điển nhất trong mọi vòng phỏng vấn. Fanout on write cho đọc nhanh nhưng chết với tài khoản 50 triệu follower; fanout on read thì ngược lại. Đáp án thật là giải pháp lai. Feed ranking để sau, đừng sa đà.</p>
         <div class="say"><div class="lab">Cuối tuần nói được</div><q>Đẩy bài lúc ghi hay lúc đọc, và ngưỡng nào thì đổi?</q></div>
         <div class="chips"><span class="lab">Vol 0</span><span class="chip">Pull vs push · 117</span></div>
+        <details class="qa"><summary>Kiểm tra cuối tuần · 4 câu</summary>
+          <div class="q"><div class="qh"><span class="k k-kn">Kiến thức</span>Đẩy bài lúc ghi hay lúc đọc? Ngưỡng nào thì đổi?</div><div class="ans"><b>Đáp án đạt</b><ul><li>Fanout on write: feed dựng sẵn ⇒ đọc nhanh; nhưng tốn ghi/lãng phí cho user không active và quá nặng với celebrity.</li><li>Fanout on read: không lãng phí nhưng đọc chậm.</li><li>Hybrid: push cho đa số, pull cho tài khoản nhiều follower; ngưỡng dựa trên chi phí fanout so với độ trễ đọc, đo thực tế rồi cấu hình.</li></ul></div></div>
+          <div class="q"><div class="qh"><span class="k k-kn">Kiến thức</span>Cache cho news feed chia mấy tầng?</div><div class="ans"><b>Đáp án đạt</b><ul><li>5 tầng: news feed, content, social graph, action, counters.</li><li>Nêu cái nào hot nhất (news feed ID + content) và lý do tách để cache độc lập.</li></ul></div></div>
+          <div class="q"><div class="qh"><span class="k k-br">Vỡ</span>Celebrity 50 triệu follower đăng bài thì sao?</div><div class="ans"><b>Đáp án đạt</b><ul><li>Fanout on write = 50 triệu lần ghi ⇒ không làm; chuyển sang pull cho tài khoản này, gộp vào feed lúc đọc.</li><li>Dùng consistent hashing để giảm hotkey.</li></ul></div></div>
+          <div class="q"><div class="qh"><span class="k k-x10">×10</span>DAU ×10 thì chỗ nào vỡ trước?</div><div class="ans"><b>Đáp án đạt</b><ul><li>Fanout service/queue, cache feed, graph DB. Scale bằng thêm worker fanout, shard cache theo user, queue để làm mượt burst.</li></ul></div></div>
+        </details>
+        <div class="chips"><span class="lab">Ôn lại 20′</span><span class="chip">Notification / Web crawler (tuần 6)</span></div>
       </div>
     </div>
 
@@ -270,6 +376,13 @@
         <p>Bài dễ ghi điểm nhất cho fullstack vì bạn hiểu phía client. Long-polling vs WebSocket, presence, offline delivery, ack. Nhớ rằng chat 1-1 và group 100 nghìn người có kiến trúc khác hẳn nhau — hỏi scope trước khi vẽ.</p>
         <div class="say"><div class="lab">Cuối tuần nói được</div><q>Message ID sinh ở client hay server, và ordering dựa vào gì?</q></div>
         <div class="chips"><span class="lab">Vol 0</span><span class="chip">HTTP 1.0 → QUIC · 53</span></div>
+        <details class="qa"><summary>Kiểm tra cuối tuần · 4 câu</summary>
+          <div class="q"><div class="qh"><span class="k k-kn">Kiến thức</span>Long-polling, WebSocket, SSE: khác gì, chọn gì cho chat?</div><div class="ans"><b>Đáp án đạt</b><ul><li>WebSocket: kết nối 2 chiều bền vững, bắt đầu bằng HTTP upgrade (qua firewall được). Dùng cho nhận tin; gửi có thể HTTP hoặc WebSocket.</li><li>Long-polling: tốn tài nguyên khi không có tin, sender/receiver có thể ở khác server, khó cân bằng. SSE: một chiều server → client.</li><li>Chat server stateful (giữ kết nối), phần còn lại stateless, dùng service discovery (ZooKeeper) chọn chat server.</li></ul></div></div>
+          <div class="q"><div class="qh"><span class="k k-kn">Kiến thức</span>Message ID sinh ở đâu và ordering dựa vào gì?</div><div class="ans"><b>Đáp án đạt</b><ul><li>ID phải sắp xếp được theo thời gian; không dùng created_at vì 2 tin cùng timestamp.</li><li>Chat 1-1/nhóm chỉ cần sequence tăng dần cục bộ trong từng kênh, không cần toàn cục (Snowflake cũng được).</li></ul></div></div>
+          <div class="q"><div class="qh"><span class="k k-kn">Kiến thức</span>Presence (online/offline) làm thế nào?</div><div class="ans"><b>Đáp án đạt</b><ul><li>Heartbeat từ client định kỳ (ví dụ 5s); nếu quá ngưỡng (ví dụ 30s) không có thì coi là offline.</li><li>Fanout trạng thái cho bạn bè qua pub/sub; nhóm lớn thì lấy khi mở nhóm.</li></ul></div></div>
+          <div class="q"><div class="qh"><span class="k k-x10">×10</span>Chat 1-1 vs group 100K người: kiến trúc khác ở đâu? Offline thì sao?</div><div class="ans"><b>Đáp án đạt</b><ul><li>Nhóm nhỏ: mỗi thành viên một inbox/sync queue ⇒ fanout on write được. Nhóm 100K: không copy vào từng inbox được — cần cách đọc/kéo khác.</li><li>Offline: lưu tin, đẩy push notification, đồng bộ lại từ sync queue khi online; lịch sử lưu ở KV store (HBase/Cassandra) vì dữ liệu khổng lồ, đọc gần đây nhiều.</li></ul></div></div>
+        </details>
+        <div class="chips"><span class="lab">Ôn lại 20′</span><span class="chip">News feed (tuần 7)</span></div>
       </div>
     </div>
 
@@ -281,17 +394,32 @@
         <p>Hai thái cực của read-heavy: một bên là pipeline transcoding nặng với upload đi thẳng lên storage, một bên là đọc cực nhanh bằng trie và cache nhiều tầng. Điểm chung là câu hỏi cache cái gì, ở đâu, và làm mới thế nào.</p>
         <div class="say"><div class="lab">Cuối tuần nói được</div><q>Trie cập nhật lại bằng cách nào mà không khoá đọc?</q></div>
         <div class="chips"><span class="lab">Vol 0</span><span class="chip">Upload large files · 74</span></div>
+        <details class="qa"><summary>Kiểm tra cuối tuần · 4 câu</summary>
+          <div class="q"><div class="qh"><span class="k k-kn">Kiến thức</span>Luồng upload video lớn thế nào? Vì sao dùng DAG?</div><div class="ans"><b>Đáp án đạt</b><ul><li>Client upload thẳng lên object storage bằng pre-signed URL, chia chunk (theo GOP) để upload song song/resume.</li><li>Transcoding là DAG các tác vụ (video, audio, thumbnail, watermark…) chạy song song: có preprocessor, DAG scheduler, resource manager, worker, kho tạm.</li></ul></div></div>
+          <div class="q"><div class="qh"><span class="k k-kn">Kiến thức</span>CDN rất đắt: cache cái gì ở đâu?</div><div class="ans"><b>Đáp án đạt</b><ul><li>Chỉ cache video phổ biến lên CDN; video ít xem phục vụ từ video server; chọn encode/phục vụ theo vùng.</li><li>Nhấn mạnh trade-off chi phí vs latency.</li></ul></div></div>
+          <div class="q"><div class="qh"><span class="k k-kn">Kiến thức</span>Trie cập nhật lại bằng cách nào mà không khoá đọc?</div><div class="ans"><b>Đáp án đạt</b><ul><li>Không cập nhật real-time: gom log truy vấn → aggregator → worker dựng trie mới offline (hằng tuần/ngày) → lưu snapshot rồi swap vào trie cache.</li><li>Mỗi node lưu sẵn top-k ⇒ lookup O(1); giới hạn độ dài prefix (~50 ký tự).</li></ul></div></div>
+          <div class="q"><div class="qh"><span class="k k-x10">×10</span>Autocomplete ×10 traffic: shard trie thế nào?</div><div class="ans"><b>Đáp án đạt</b><ul><li>Shard theo chữ cái đầu nhưng phân bố không đều (‘s’ nhiều hơn ‘x’) ⇒ dùng shard map manager dựa trên phân bố thực tế.</li><li>Thêm tầng cache ở browser/CDN cho prefix phổ biến.</li></ul></div></div>
+        </details>
+        <div class="chips"><span class="lab">Ôn lại 20′</span><span class="chip">Chat (tuần 8)</span></div>
       </div>
     </div>
 
     <div class="wk" style="--bc:var(--p3);animation-delay:.22s">
       <div class="node">10</div>
       <div class="card">
-        <div class="kicker">Vol 2 · nhóm transactional</div>
+        <div class="kicker">Vol 2 · chương 7 (Hotel) + chương 11 (Payment)</div>
         <h3>Hotel reservation · Payment</h3>
         <p>Nhóm hay bị bỏ qua nhưng rất hay được hỏi cho e-commerce và fintech. Đây là chỗ duy nhất trong lộ trình mà eventual consistency không cứu được bạn: đặt trùng phòng và trừ tiền hai lần đều là lỗi người dùng nhìn thấy ngay.</p>
         <div class="say"><div class="lab">Cuối tuần nói được</div><q>Chống double-booking bằng lock hay bằng điều kiện trên UPDATE?</q></div>
         <div class="chips"><span class="lab">Vol 0</span><span class="chip">Avoid double charge · 136</span><span class="chip">Reconciliation · 122</span></div>
+        <details class="qa"><summary>Kiểm tra cuối tuần · 5 câu</summary>
+          <div class="q"><div class="qh"><span class="k k-cl">Clarify</span>Hotel reservation: hỏi gì? Thiết kế đặt phòng theo phòng cụ thể hay loại phòng?</div><div class="ans"><b>Đáp án đạt</b><ul><li>Quy mô (số hotel/phòng), có payment trong scope không, cho phép overbooking (ví dụ 10%), huỷ/hoàn tiền, có tìm kiếm không.</li><li>Người dùng đặt một loại phòng chứ không phải phòng số cụ thể ⇒ bảng room_type_inventory (hotel_id, room_type_id, date, total_inventory, total_reserved); overbooking: cho phép total_reserved tới 110% total_inventory.</li></ul></div></div>
+          <div class="q"><div class="qh"><span class="k k-kn">Kiến thức</span>Chống double-booking: lock hay điều kiện trên UPDATE?</div><div class="ans"><b>Đáp án đạt</b><ul><li>Hai vấn đề riêng: (1) user bấm 2 lần ⇒ vô hiệu nút phía client + idempotency key (reservation_id làm khoá chính, unique constraint). (2) hai user tranh phòng cuối ⇒ race condition.</li><li>Pessimistic lock (SELECT … FOR UPDATE): dễ làm nhưng deadlock, kém scale. Optimistic lock (version) hoặc CHECK (total_inventory − total_reserved ≥ 0): hợp vì QPS đặt phòng thấp; trả giá khi tranh chấp cao thì nhiều request thất bại.</li></ul></div></div>
+          <div class="q"><div class="qh"><span class="k k-kn">Kiến thức</span>Exactly-once trong payment = gì + gì?</div><div class="ans"><b>Đáp án đạt</b><ul><li>At-least-once (retry với exponential backoff, Retry-After) + at-most-once (idempotency key, thường là UUID ở header, lưu qua unique constraint).</li><li>Request trùng đồng thời: chỉ một được xử lý, còn lại 429/trả kết quả cũ. Với PSP: nonce → token dùng làm idempotency key phía PSP.</li></ul></div></div>
+          <div class="q"><div class="qh"><span class="k k-kn">Kiến thức</span>Reconciliation để làm gì? Ledger kiểu double-entry nghĩa là gì?</div><div class="ans"><b>Đáp án đạt</b><ul><li>Reconciliation = so khớp định kỳ (hằng đêm) settlement file của PSP/ngân hàng với ledger — là tuyến phòng thủ cuối; lệch chia 3 loại: tự động sửa được, phân loại được nhưng sửa tay, không phân loại được.</li><li>Double-entry: mỗi giao dịch ghi 2 dòng cùng số tiền (ghi nợ/ghi có), tổng mọi dòng = 0.</li></ul></div></div>
+          <div class="q"><div class="qh"><span class="k k-br">Vỡ</span>Mỗi microservice một DB thì giữ nhất quán thế nào?</div><div class="ans"><b>Đáp án đạt</b><ul><li>2PC: nguyên tử nhưng blocking, một node lỗi chặn tiến trình. Saga: chuỗi giao dịch cục bộ + giao dịch bù, eventual consistency.</li><li>Sách chọn thực dụng: để reservation và inventory chung một DB quan hệ để tận dụng ACID; hỏng thì có retry queue + dead letter queue.</li></ul></div></div>
+        </details>
+        <div class="chips"><span class="lab">Ôn lại 20′</span><span class="chip">Chat (tuần 8) và YouTube hoặc Autocomplete (tuần 9)</span></div>
       </div>
     </div>
 
@@ -307,20 +435,140 @@
         <h3>Bốn bài, không mở note <span class="tag">nặng</span></h3>
         <p>45 phút mỗi bài, chọn ngẫu nhiên trong số đã học, quay video. Cảm giác sẽ tệ hơn bạn tưởng, và đó chính là điểm. Nghe lại rồi đếm: im lặng bao nhiêu giây, có clarify yêu cầu trước khi vẽ không, có tự nêu trade-off hay ngồi đợi được hỏi.</p>
         <div class="say"><div class="lab">Tuần này nặng vì</div><q>Nó nặng về tâm lý chứ không phải kiến thức — đừng xếp việc gấp vào.</q></div>
+        <details class="qa"><summary>Rubric tự chấm sau mỗi bài mock</summary>
+          <div class="q"><div class="qh"><span class="k k-kn">Tự chấm</span>Bạn có tự giữ đúng khung thời gian không?</div><div class="ans"><b>Đáp án đạt</b><ul><li>Bước 1 ≤ 10′ (có clarify, chốt scope bằng lời), bước 2 ≈ 10–15′ (có xin buy-in), deep dive ≥ 10′, wrap-up 3–5′.</li></ul></div></div>
+          <div class="q"><div class="qh"><span class="k k-kn">Tự chấm</span>Có đưa ước lượng và tự nêu trade-off không?</div><div class="ans"><b>Đáp án đạt</b><ul><li>Ít nhất một phép ước lượng QPS/dung lượng; mỗi lựa chọn lớn có ‘vì sao không phương án kia’ — nói trước khi bị hỏi.</li></ul></div></div>
+          <div class="q"><div class="qh"><span class="k k-kn">Tự chấm</span>Có trả lời được ba câu hỏi ‘vỡ’?</div><div class="ans"><b>Đáp án đạt</b><ul><li>Traffic ×10 thì gì vỡ trước; một AZ chết thì sao; chỗ nào eventual consistency chấp nhận được và vì sao.</li></ul></div></div>
+          <div class="q"><div class="qh"><span class="k k-kn">Tự chấm</span>Wrap-up có đủ ý?</div><div class="ans"><b>Đáp án đạt</b><ul><li>Nhắc bottleneck, monitoring/alerting, xử lý lỗi, và hướng mở rộng — theo gợi ý cuối mỗi chương trong sách.</li></ul></div></div>
+        </details>
+        <div class="chips"><span class="lab">Ôn lại 20′</span><span class="chip">Tuần 11 chính là vòng ôn tổng — mỗi bài mock lấy từ tuần 3–10</span></div>
       </div>
     </div>
 
     <div class="wk" style="--bc:var(--p4);animation-delay:.1s">
       <div class="node">12</div>
       <div class="card">
-        <div class="kicker">Vá lỗ hổng · case dự phòng</div>
+        <div class="kicker">Vá lỗ hổng · cầu nối sang mở rộng</div>
         <h3>Quay lại chỗ mock làm lộ ra</h3>
-        <p>Còn giờ thì thêm Google Drive (chương 15), Proximity service hoặc Distributed message queue. Bỏ hẳn stock exchange và distributed email trừ khi bạn làm đúng domain đó.</p>
+        <p>Còn giờ thì sang đường mở rộng bên dưới: bắt đầu bằng Distributed message queue (Vol 2 chương 4), Google Drive (Vol 1 chương 15) hoặc Digital wallet nếu bạn làm fintech. Bỏ hẳn Stock exchange và Distributed email trừ khi bạn làm đúng domain đó.</p>
         <ul>
           <li>Traffic tăng gấp 10 thì thành phần nào vỡ trước?</li>
           <li>Một availability zone chết thì chuyện gì xảy ra?</li>
           <li>Chỗ nào eventual consistency là chấp nhận được, và vì sao user không nhận ra?</li>
         </ul>
+        <details class="qa"><summary>Kiểm tra cuối tuần · 3 câu</summary>
+          <div class="q"><div class="qh"><span class="k k-x10">×10</span>Với mỗi case cũ: traffic ×10 thì thành phần nào vỡ trước, và bạn chữa bằng gì?</div><div class="ans"><b>Đáp án đạt</b><ul><li>Nêu được một thành phần cụ thể (DB ghi, cache, queue, fanout…) kèm phương án: shard, cache, replica, batching, backpressure.</li></ul></div></div>
+          <div class="q"><div class="qh"><span class="k k-br">Vỡ</span>Một availability zone chết thì chuyện gì xảy ra?</div><div class="ans"><b>Đáp án đạt</b><ul><li>Replica ở ≥2 AZ, failover tự động, kiểm tra quorum/leader election còn đủ đa số; dữ liệu mất tối đa bao nhiêu (RPO) và mất bao lâu (RTO).</li></ul></div></div>
+          <div class="q"><div class="qh"><span class="k k-kn">Kiến thức</span>Chỗ nào eventual consistency là chấp nhận được và user không nhận ra?</div><div class="ans"><b>Đáp án đạt</b><ul><li>Like/đếm view, feed của người khác, số liệu thống kê. Không chấp nhận: số dư, đặt phòng, trừ tiền (strong consistency/ACID).</li></ul></div></div>
+        </details>
+      </div>
+    </div>
+
+    <div class="band" style="--bc:#2B6A8A;--bbg:#E3EFF4;--bbd:#BCD5E1">
+      <h2>Mở rộng · Vol 2</h2><span class="rng">tuần 13–18</span>
+      <span class="note">chỉ làm sau khi tuần 11–12 ổn; mỗi tuần vẫn theo vòng lặp làm chay → đọc → diff → tóm tắt</span>
+    </div>
+
+    <div class="wk" style="--bc:#2B6A8A;--bbg:#E3EFF4;--bbd:#BCD5E1;animation-delay:.04s">
+      <div class="node">13</div>
+      <div class="card">
+        <div class="kicker">Vol 2 · chương 4</div>
+        <h3>Distributed message queue <span class="tag t-must">nên làm</span> <span class="tag">nặng</span></h3>
+        <p>Đây là bài dạy bạn Kafka từ bên trong, và là nền cho mọi case mở rộng sau (metrics, ad click, wallet). Trọng tâm: log tuần tự thay vì DB, partition và consumer group, replication với ISR, ba mức delivery semantics.</p>
+        <div class="say"><div class="lab">Cuối tuần nói được</div><q>Vì sao một partition chỉ được một consumer trong cùng group đọc?</q></div>
+        <details class="qa"><summary>Kiểm tra cuối tuần · 5 câu</summary>
+          <div class="q"><div class="qh"><span class="k k-kn">Kiến thức</span>Vì sao lưu message bằng write-ahead log append-only trên đĩa thay vì database?</div><div class="ans"><b>Đáp án đạt</b><ul><li>Truy cập tuần tự: ổ quay RAID đạt vài trăm MB/s, tận dụng OS page cache; không có update/delete ngẫu nhiên.</li><li>Chia segment file: chỉ ghi vào active segment, segment cũ chỉ đọc và bị cắt khi quá hạn retention. Message giữ nguyên định dạng từ producer → queue → consumer để tránh copy.</li></ul></div></div>
+          <div class="q"><div class="qh"><span class="k k-kn">Kiến thức</span>Partition, consumer group, offset liên hệ nhau thế nào? Mô phỏng point-to-point và pub/sub ra sao?</div><div class="ans"><b>Đáp án đạt</b><ul><li>Topic chia thành partition (FIFO, offset tăng dần); mỗi group giữ offset riêng. Một partition chỉ 1 consumer trong group để giữ thứ tự; consumer thừa số partition thì ngồi không.</li><li>Một group duy nhất ≈ point-to-point; nhiều group cùng đọc một topic = pub/sub. Nên cấp đủ partition từ đầu vì giảm partition rất phiền.</li></ul></div></div>
+          <div class="q"><div class="qh"><span class="k k-kn">Kiến thức</span>ACK = 0 / 1 / all khác gì? ISR để làm gì?</div><div class="ans"><b>Đáp án đạt</b><ul><li>0: gửi không chờ, không retry — nhanh nhất, có thể mất. 1: leader ghi xong là ack — leader chết trước khi replicate thì mất. all: chờ mọi ISR — bền nhất, chậm theo replica chậm nhất.</li><li>ISR là tập replica ‘đủ kịp’ leader; cân bằng hiệu năng và độ bền; replica phải nằm ở broker khác nhau; controller (bầu bằng ZooKeeper/etcd) lo failover.</li></ul></div></div>
+          <div class="q"><div class="qh"><span class="k k-kn">Kiến thức</span>At-most / at-least / exactly once: commit offset khi nào? Dùng cho case nào?</div><div class="ans"><b>Đáp án đạt</b><ul><li>At-most-once: commit offset trước khi xử lý (metrics, mất ít không sao). At-least-once: commit sau khi xử lý, có thể trùng ⇒ consumer dedupe/idempotent (mặc định hợp lý).</li><li>Exactly-once: đắt và phức tạp, dành cho tài chính (payment, trading). Push vs pull: queue thường chọn pull để consumer tự kiểm soát tốc độ và batch; long polling tránh poll rỗng.</li></ul></div></div>
+          <div class="q"><div class="qh"><span class="k k-x10">×10</span>Throughput ×10 thì chỉnh gì? Rebalance có vấn đề gì?</div><div class="ans"><b>Đáp án đạt</b><ul><li>Thêm partition và consumer, tăng batch size ở producer (đánh đổi throughput lấy latency), thêm broker (tạm thời để dư replica rồi bỏ bản cũ khi bản mới bắt kịp).</li><li>Hàng trăm consumer thì rebalance có thể mất vài phút ⇒ làm ngoài giờ cao điểm.</li></ul></div></div>
+        </details>
+        <div class="chips"><span class="lab">Sách</span><span class="chip">Vol 2 · Ch 4 · tr.91</span></div>
+      </div>
+    </div>
+
+    <div class="wk" style="--bc:#2B6A8A;--bbg:#E3EFF4;--bbd:#BCD5E1;animation-delay:.04s">
+      <div class="node">14</div>
+      <div class="card">
+        <div class="kicker">Vol 2 · chương 5 + chương 6</div>
+        <h3>Metrics monitoring · Ad click aggregation <span class="tag t-must">nên làm</span> <span class="tag">nặng</span></h3>
+        <p>Hai case stream processing cùng họ. Metrics dạy time-series DB, pull vs push, downsampling. Ad click dạy bài toán khó thật sự: đếm đúng khi có sự kiện đến muộn, trùng, và node chết giữa chừng — vì kết quả dùng để tính tiền.</p>
+        <div class="say"><div class="lab">Cuối tuần nói được</div><q>Sự kiện đến muộn 5 tiếng thì cửa sổ tổng hợp xử lý thế nào?</q></div>
+        <details class="qa"><summary>Kiểm tra cuối tuần · 5 câu</summary>
+          <div class="q"><div class="qh"><span class="k k-cl">Clarify</span>Metrics: quy mô và retention bạn dựa vào đâu?</div><div class="ans"><b>Đáp án đạt</b><ul><li>1.000 server pool × 100 máy × 100 metric ≈ 10 triệu metric; ghi liên tục nặng, đọc theo đợt.</li><li>Retention 1 năm: dữ liệu thô 7 ngày, độ phân giải 1 phút trong 30 ngày, 1 giờ trong 1 năm (downsampling).</li></ul></div></div>
+          <div class="q"><div class="qh"><span class="k k-kn">Kiến thức</span>Vì sao dùng time-series DB (InfluxDB, Prometheus) thay vì MySQL hoặc Cassandra?</div><div class="ans"><b>Đáp án đạt</b><ul><li>Ghi liên tục rất nhiều, truy vấn khoảng thời gian/ aggregation theo label; SQL cho moving average rất khó đọc; DB đa dụng cần tinh chỉnh rất nhiều.</li><li>Label nên low cardinality. Ghép Kafka phía trước để không mất dữ liệu khi TSDB lỗi.</li></ul></div></div>
+          <div class="q"><div class="qh"><span class="k k-kn">Kiến thức</span>Pull hay push để thu thập metrics?</div><div class="ans"><b>Đáp án đạt</b><ul><li>Pull (Prometheus): dễ debug (/metrics), health check; cần service discovery (etcd/ZooKeeper) và consistent hash ring chia collector. Push (CloudWatch, Graphite): hợp job ngắn/serverless, nhiều datacenter; cần agent và collector sau load balancer.</li><li>Không có đáp án tuyệt đối — nêu ưu/nhược cả hai quan trọng hơn chọn một.</li></ul></div></div>
+          <div class="q"><div class="qh"><span class="k k-kn">Kiến thức</span>Ad click: ước lượng và luồng thiết kế?</div><div class="ans"><b>Đáp án đạt</b><ul><li>1 tỉ click/ngày ≈ 10.000 QPS, peak ×5 = 50.000; 0,1 KB/sự kiện ⇒ ~100 GB/ngày ≈ 3 TB/tháng.</li><li>Log watcher → Kafka → aggregation (map–aggregate–reduce) → Kafka → DB writer → Cassandra; hash theo ad_id để cùng ad vào cùng partition.</li></ul></div></div>
+          <div class="q"><div class="qh"><span class="k k-br">Vỡ</span>Làm sao đúng khi có sự kiện muộn, trùng, node aggregator chết, hot ad?</div><div class="ans"><b>Đáp án đạt</b><ul><li>Muộn: watermark mở rộng cửa sổ (đánh đổi chính xác vs độ trễ) + reconcile cuối ngày bằng batch job. Cửa sổ: tumbling (đếm theo phút), sliding (top N).</li><li>Trùng/mất: lưu offset sau khi downstream ack, cần transaction phân tán để đạt exactly-once. Chết node: snapshot trạng thái (offset, top-N) rồi replay Kafka từ snapshot. Hot ad: cấp thêm aggregation node cho ad đó.</li></ul></div></div>
+        </details>
+        <div class="chips"><span class="lab">Sách</span><span class="chip">Vol 2 · Ch 5 · tr.131</span><span class="chip">Vol 2 · Ch 6 · tr.159</span></div>
+      </div>
+    </div>
+
+    <div class="wk" style="--bc:#2B6A8A;--bbg:#E3EFF4;--bbd:#BCD5E1;animation-delay:.04s">
+      <div class="node">15</div>
+      <div class="card">
+        <div class="kicker">Vol 2 · chương 12</div>
+        <h3>Digital wallet <span class="tag t-must">nên làm</span> <span class="tag">nặng</span></h3>
+        <p>Tiếp nối Payment ở tuần 10 nhưng đi vào chỗ senior: chuyển tiền giữa hai tài khoản nằm ở hai DB khác nhau. Bạn sẽ gặp 2PC, TC/C, Saga, rồi event sourcing + CQRS và Raft để vừa nhanh vừa kiểm toán được.</p>
+        <div class="say"><div class="lab">Cuối tuần nói được</div><q>Khi nào chọn TC/C thay vì Saga?</q></div>
+        <details class="qa"><summary>Kiểm tra cuối tuần · 4 câu</summary>
+          <div class="q"><div class="qh"><span class="k k-kn">Kiến thức</span>1 triệu TPS cần bao nhiêu node DB? Con số thể hiện gì?</div><div class="ans"><b>Đáp án đạt</b><ul><li>Mỗi chuyển khoản chạm 2 tài khoản ⇒ ~2 triệu thao tác/giây; nếu 1 node ≈ 1.000 TPS thì cần ~2.000 node.</li><li>Bài học: tăng TPS mỗi node mới là đòn bẩy rẻ nhất, từ đó mới có lý do tối ưu file-based, in-memory.</li></ul></div></div>
+          <div class="q"><div class="qh"><span class="k k-kn">Kiến thức</span>So sánh 2PC, TC/C và Saga.</div><div class="ans"><b>Đáp án đạt</b><ul><li>2PC: cấp DB, blocking, một node lỗi chặn cả đường. TC/C: cấp ứng dụng, Try → Confirm/Cancel, ở pha 2 các giao dịch cục bộ đã xong; cần phase status table và xử lý Cancel đến trước Try.</li><li>Saga: chuỗi tuyến tính, n bước + n bước bù, orchestration (ưu tiên) hoặc choreography. TC/C hợp khi nhạy latency/nhiều service vì song song được; Saga là mặc định của microservice.</li></ul></div></div>
+          <div class="q"><div class="qh"><span class="k k-kn">Kiến thức</span>Event sourcing: command, event, state, state machine là gì? Vì sao auditor thích?</div><div class="ans"><b>Đáp án đạt</b><ul><li>Command = ý định, có thể không hợp lệ; event = sự thật bất biến, thì quá khứ; state machine tất định validate command → event và apply event → state.</li><li>Reproducibility: replay event cho biết số dư tại thời điểm bất kỳ, kiểm lại số dư hiện tại, và so kết quả hai phiên bản code. CQRS: phát event, nhiều read-only state machine dựng view (eventually consistent).</li></ul></div></div>
+          <div class="q"><div class="qh"><span class="k k-br">Vỡ</span>Làm sao vừa nhanh vừa bền khi chuyển sang file-based?</div><div class="ans"><b>Đáp án đạt</b><ul><li>Command/event ghi append-only bằng mmap, state trong RocksDB (LSM), snapshot định kỳ (ví dụ 00:00) đưa lên object storage.</li><li>Chỉ event cần độ tin cậy cao (state/snapshot dựng lại được, command không đủ vì sinh event có thể không tất định) ⇒ nhân bản event list bằng Raft: còn quá nửa node là chạy tiếp (5 node chịu 2 chết).</li></ul></div></div>
+        </details>
+        <div class="chips"><span class="lab">Sách</span><span class="chip">Vol 2 · Ch 12 · tr.341</span><span class="chip">Ôn: Payment · Ch 11 · tr.315</span></div>
+      </div>
+    </div>
+
+    <div class="wk" style="--bc:#2B6A8A;--bbg:#E3EFF4;--bbd:#BCD5E1;animation-delay:.04s">
+      <div class="node">16</div>
+      <div class="card">
+        <div class="kicker">Vol 2 · chương 10 + chương 9</div>
+        <h3>Leaderboard · S3-like object storage <span class="tag t-should">làm nếu còn giờ</span></h3>
+        <p>Hai case nhẹ hơn nhưng dạy hai tư duy khác hẳn: chọn đúng cấu trúc dữ liệu (Redis sorted set) và thiết kế storage từ đáy (tách metadata/data, bền bằng erasure coding).</p>
+        <div class="say"><div class="lab">Cuối tuần nói được</div><q>Rank của một user trong 25 triệu người lấy ra thế nào cho nhanh?</q></div>
+        <details class="qa"><summary>Kiểm tra cuối tuần · 4 câu</summary>
+          <div class="q"><div class="qh"><span class="k k-kn">Kiến thức</span>Vì sao SQL ORDER BY không đủ cho leaderboard real-time? Redis sorted set giải quyết ra sao?</div><div class="ans"><b>Đáp án đạt</b><ul><li>Muốn biết rank phải sắp xếp/quét hàng triệu dòng (hàng chục giây), dữ liệu đổi liên tục nên khó cache.</li><li>Sorted set = hash table + skip list, thao tác O(log n): ZADD/ZINCRBY cập nhật, ZREVRANGE top-N, ZREVRANK rank của một user. Thông tin profile lưu MySQL + cache cho top 10.</li></ul></div></div>
+          <div class="q"><div class="qh"><span class="k k-kn">Kiến thức</span>Ước lượng bộ nhớ và độ bền?</div><div class="ans"><b>Đáp án đạt</b><ul><li>25 triệu MAU × ~26 byte ≈ 650 MB (nhân đôi cho overhead) — một Redis đủ; peak ~2.500 QPS cũng trong sức một node.</li><li>Bền: replica được promote khi master chết; bảng điểm trong MySQL để dựng lại leaderboard.</li></ul></div></div>
+          <div class="q"><div class="qh"><span class="k k-x10">×10</span>DAU ×100 thì shard thế nào?</div><div class="ans"><b>Đáp án đạt</b><ul><li>65 GB và ~250.000 QPS ⇒ phải shard. Fixed partition theo khoảng điểm: top 10 lấy từ shard điểm cao nhất; rank = rank cục bộ + số người điểm cao hơn ở các shard khác; user đổi shard khi điểm tăng.</li><li>Redis Cluster 16.384 hash slot (CRC16): tự động nhưng top-k phải scatter-gather và khó tính rank ⇒ sách nghiêng về fixed partition.</li></ul></div></div>
+          <div class="q"><div class="qh"><span class="k k-kn">Kiến thức</span>S3: tách metadata và data thế nào? Độ bền đạt bằng gì?</div><div class="ans"><b>Đáp án đạt</b><ul><li>Metadata store ánh xạ bucket/object name → object_id; data store chỉ biết object_id. Không có thư mục thật. Nhiều file nhỏ phí block/inode ⇒ gộp vào read-write file append-only (như WAL), đầy vài GB thì chuyển read-only.</li><li>Độ bền: 3 bản sao ≈ 6 nines, tốn thêm 200%; erasure coding (8+4) ≈ 11 nines, tốn thêm 50% nhưng đọc cần ≥ 8 node. Thêm checksum cuối mỗi object để phát hiện hỏng; replica đặt khác failure domain. Placement service (cluster 5–7 node Paxos/Raft) theo dõi heartbeat (quá 15s coi là down).</li></ul></div></div>
+        </details>
+        <div class="chips"><span class="lab">Sách</span><span class="chip">Vol 2 · Ch 10 · tr.289</span><span class="chip">Vol 2 · Ch 9 · tr.253</span></div>
+      </div>
+    </div>
+
+    <div class="wk" style="--bc:#2B6A8A;--bbg:#E3EFF4;--bbd:#BCD5E1;animation-delay:.04s">
+      <div class="node">17</div>
+      <div class="card">
+        <div class="kicker">Vol 2 · chương 1, 2, 3</div>
+        <h3>Proximity · Nearby friends · Google Maps <span class="tag t-should">làm nếu còn giờ</span></h3>
+        <p>Nhóm geo-spatial. Chỉ cần nắm bộ công cụ chung: geohash/quadtree/S2, Redis pub/sub cho dữ liệu thời gian thực, và tile + CDN cho bản đồ. Đừng sa vào chi tiết routing.</p>
+        <div class="say"><div class="lab">Cuối tuần nói được</div><q>Geohash có hạn chế gì ở biên ô và bạn chữa thế nào?</q></div>
+        <details class="qa"><summary>Kiểm tra cuối tuần · 4 câu</summary>
+          <div class="q"><div class="qh"><span class="k k-kn">Kiến thức</span>Proximity service: geohash, quadtree, S2 khác gì? Vấn đề biên?</div><div class="ans"><b>Đáp án đạt</b><ul><li>Geohash: mã hoá lat/long thành chuỗi, prefix chung = gần nhau; dễ làm với DB thường. Quadtree: cây trong bộ nhớ, tự chia khi ô đông. S2: ô trên hình cầu, hợp vùng phức tạp.</li><li>Biên: hai điểm sát nhau nhưng prefix khác ⇒ tìm cả các ô lân cận; không đủ kết quả thì mở rộng bán kính. Geo index nhỏ, nhân bản replica hợp lý hơn shard; cache theo khoá geohash.</li></ul></div></div>
+          <div class="q"><div class="qh"><span class="k k-kn">Kiến thức</span>Nearby friends: kiến trúc real-time ra sao?</div><div class="ans"><b>Đáp án đạt</b><ul><li>WebSocket + Redis Pub/Sub, mỗi user một channel, bạn bè subscribe channel nhau; location cache Redis với TTL; hash ring (etcd/ZooKeeper) chia Pub/Sub server.</li><li>Ước lượng: ~334K cập nhật vị trí/giây nhân số bạn bè online ⇒ ~14 triệu tin chuyển tiếp/giây; điểm nghẽn Pub/Sub là CPU chứ không phải bộ nhớ.</li></ul></div></div>
+          <div class="q"><div class="qh"><span class="k k-kn">Kiến thức</span>Google Maps: dựng bản đồ và tìm đường thế nào?</div><div class="ans"><b>Đáp án đạt</b><ul><li>Bản đồ chia tile theo zoom level, dựng sẵn và phục vụ qua CDN. Routing tile phân cấp, thuật toán A*; ETA có ML, ranker; rerouting thích ứng khi có tắc đường.</li><li>Vị trí user đi qua Kafka vào Cassandra; WebSocket hoặc SSE cho cập nhật thời gian thực.</li></ul></div></div>
+          <div class="q"><div class="qh"><span class="k k-x10">×10</span>Nearby friends ×10 người dùng: vỡ ở đâu trước?</div><div class="ans"><b>Đáp án đạt</b><ul><li>Pub/Sub CPU-bound và số kết nối WebSocket ⇒ thêm shard channel (theo user, hoặc geohash channel), giảm tần suất cập nhật, chỉ gửi cho bạn bè đang gần.</li></ul></div></div>
+        </details>
+        <div class="chips"><span class="lab">Sách</span><span class="chip">Vol 2 · Ch 1 · tr.1</span><span class="chip">Ch 2 · tr.35</span><span class="chip">Ch 3 · tr.59</span></div>
+      </div>
+    </div>
+
+    <div class="wk" style="--bc:#2B6A8A;--bbg:#E3EFF4;--bbd:#BCD5E1;animation-delay:.04s">
+      <div class="node">18</div>
+      <div class="card">
+        <div class="kicker">Vol 1 · chương 15 + mock vòng 2</div>
+        <h3>Google Drive · bốn bài mock mới <span class="tag t-should">làm nếu còn giờ</span></h3>
+        <p>Chốt đường mở rộng bằng Google Drive (block server, delta sync, dedupe) rồi chạy lại vòng mock: bốn bài lấy ngẫu nhiên từ các case tuần 13–17, 45 phút mỗi bài, chấm bằng rubric tuần 11. Distributed email (Vol 2 chương 8) và Stock exchange (chương 13) chỉ làm khi đúng domain của bạn.</p>
+        <div class="say"><div class="lab">Cuối tuần nói được</div><q>Hai người sửa cùng một file cùng lúc thì chuyện gì xảy ra?</q></div>
+        <details class="qa"><summary>Kiểm tra cuối tuần · 3 câu</summary>
+          <div class="q"><div class="qh"><span class="k k-kn">Kiến thức</span>Google Drive: tiết kiệm băng thông và dung lượng bằng cách nào?</div><div class="ans"><b>Đáp án đạt</b><ul><li>Chia file thành block, chỉ gửi block đổi (delta sync), nén block, dedupe ở mức block; block server lo tách/ghép.</li><li>Thông báo thay đổi dùng long polling; metadata DB cần ACID (SQL).</li></ul></div></div>
+          <div class="q"><div class="qh"><span class="k k-br">Vỡ</span>Hai người sửa cùng file cùng lúc thì sao?</div><div class="ans"><b>Đáp án đạt</b><ul><li>Người xử lý trước thắng; người sau nhận xung đột và chọn gộp hoặc ghi đè (giữ cả hai bản).</li></ul></div></div>
+          <div class="q"><div class="qh"><span class="k k-x10">×10</span>Chọn Distributed email hay Stock exchange khi nào?</div><div class="ans"><b>Đáp án đạt</b><ul><li>Chỉ khi domain công việc liên quan (mail server, giao dịch độ trễ micro-giây): các kỹ thuật chung đã được phủ ở tuần 13–17.</li></ul></div></div>
+        </details>
+        <div class="chips"><span class="lab">Sách</span><span class="chip">Vol 1 · Ch 15</span><span class="chip">Vol 2 · Ch 8 (tuỳ chọn)</span><span class="chip">Vol 2 · Ch 13 (tuỳ chọn)</span></div>
       </div>
     </div>
 
@@ -354,7 +602,21 @@
         <div class="step"><div class="t">20 phút</div><div class="b">Viết diff</div><div class="s">Mình thiếu gì, sai giả định gì</div></div>
         <div class="step"><div class="t">10 phút</div><div class="b">Tóm tắt 1 trang</div><div class="s">API, data model, sơ đồ, 3 bottleneck</div></div>
       </div>
-      <p>Sau 2 tuần, làm lại case cũ trong 20 phút từ trí nhớ. Bước này hay bị bỏ nhất, và là lý do nhiều người đọc hết sách vẫn trắng tay: kiến thức chưa kịp chuyển từ nhận ra sang tái tạo thì đã học sang bài mới.</p>
+      <p>
+      <div class="sched">
+        <div class="t">Lịch ôn lại — làm lại case của 2 tuần trước, 20 phút, từ trí nhớ</div>
+        <div class="grid">
+          <span>T5 → URL shortener</span><span>T6 → Rate limiter · Unique ID</span><span>T7 → Key-value store</span><span>T8 → Notification · Crawler</span>
+          <span>T9 → News feed</span><span>T10 → Chat</span><span>T11–12 → mock + vá lỗ hổng</span><span>T15 → Message queue</span>
+        </div>
+      </div>
+      <div class="sched">
+        <div class="t">Ba câu hỏi gắn vào cuối mỗi case</div>
+        <div class="grid g3">
+          <span>Clarify: bạn hỏi gì trước khi vẽ?</span><span>Traffic ×10: thành phần nào vỡ trước?</span><span>Một AZ chết: dữ liệu và dịch vụ ra sao?</span>
+        </div>
+      </div>
+      Sau 2 tuần, làm lại case cũ trong 20 phút từ trí nhớ. Bước này hay bị bỏ nhất, và là lý do nhiều người đọc hết sách vẫn trắng tay: kiến thức chưa kịp chuyển từ nhận ra sang tái tạo thì đã học sang bài mới.</p>
     </div>
 
   </main>
